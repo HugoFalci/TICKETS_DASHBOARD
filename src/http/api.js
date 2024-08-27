@@ -1,7 +1,3 @@
-import dotenv from 'dotenv';
-dotenv.config(); // Esta linha deve ser executada antes de usar as variáveis de ambiente
-
-
 const authorization = process.env.VUE_APP_CHAVE_API;
 const list_id = process.env.VUE_APP_LIST_ID;
 
