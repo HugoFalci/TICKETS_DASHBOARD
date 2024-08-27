@@ -14,9 +14,15 @@ export class TratamentoDatas {
         const diaAtual = new Date();
         return diaAtual.toISOString().split('T')[0] + 'T23:59:59.000Z';
     }
+
+    static segundaDaSemana() {
+        const diaAtual = new Date();
+        const diaDaSemana = diaAtual.getDay(); // 0 = Domingo, 1 = Segunda, ..., 6 = Sábado
+        const diff = diaAtual.getDate() - diaDaSemana + (diaDaSemana === 0 ? -6 : 1);
+        const segundaFeira = new Date(diaAtual.setDate(diff));
+        return segundaFeira.toISOString().split('T')[0] + 'T00:00:00.000Z';
+    }
+
 }
 
 export default TratamentoDatas;
-
-
-console.log(TratamentoDatas.diaInicioMes());

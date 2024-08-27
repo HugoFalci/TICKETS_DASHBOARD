@@ -1,7 +1,11 @@
 <template>
-  <Cabecalho />
-  <Home />
-  <AppFooter />
+  <v-app class="bg-blue-lighten-5">
+    <Cabecalho />
+    <v-main>
+      <Home />
+    </v-main>
+    <AppFooter class="bg-blue-lighten-5"/>
+  </v-app>
 </template>
 
 <script setup>
