@@ -1,4 +1,4 @@
-import { fetchTasks, fetchTasksTags } from '../http/api.js'
+import { fetchTasks } from '../http/api.js'
 import { TratamentoDatas } from './TratamentoDatas.js'
 
 export class QuantidadeTickets {
@@ -6,7 +6,7 @@ export class QuantidadeTickets {
         const query = new URLSearchParams({
             date_created_gt: TratamentoDatas.convertData(TratamentoDatas.segundaDaSemana()), // Data de início
             date_created_lt: TratamentoDatas.convertData(TratamentoDatas.diaAtual()), // Data de fim
-            include_closed: 'false'           // Status dos tickets
+            include_closed: 'true'           // Status dos tickets
         }).toString();
         const data = await fetchTasks(query);
 
@@ -22,7 +22,7 @@ export class QuantidadeTickets {
         const query = new URLSearchParams({
             date_created_gt: TratamentoDatas.convertData(TratamentoDatas.diaInicioMes()), // Data de início
             date_created_lt: TratamentoDatas.convertData(TratamentoDatas.diaAtual()), // Data de fim
-            include_closed: 'false'           // Status dos tickets
+            include_closed: 'true'           // Status dos tickets
         }).toString();
         const data = await fetchTasks(query);
 
@@ -66,30 +66,6 @@ export class QuantidadeTickets {
             return 0;
         }
     }
-
-    async contarTicketsPorStatus() {
-        const query = new URLSearchParams({
-            include_closed: 'false'
-        })
-        const statusCount = {};
-        let totalTicket = 0;
-
-        const data = await fetchTasks(query);
-        
-        data.tasks.forEach(task => {
-            const status = task.status.status;
-
-            if (statusCount[status]) {
-                statusCount[status]++;
-            } else {
-                statusCount[status] = 1;
-            }
-
-            totalTicket ++;
-        });
-        console.log(totalTicket);
-        return {statusCount, totalTicket};
-    }
 };
 
 async function run() {
@@ -99,7 +75,7 @@ async function run() {
         // console.log(`Quantidade de tickets ABERTOS nesta semana: ${await analise.quantidadeTicketsAbertosSemana()}`);
         // console.log(`Quantidade de tickets FECHADOS neste mês: ${await analise.quantidadeTicketsFechadosMes()}`);
         // console.log(`Quantidade de tickets FECHADOS nesta semana: ${await analise.quantidadeTicketsFechadosSemana()}`);
-        console.log(`Tickets por status: ${await analise.contarTicketsPorStatus()}`)
+        // console.log(`Tickets por status: ${await analise.contarTicketsPorPrioridade()}`)
             ;
     } catch (error) {
         console.error('Erro ao buscar tarefas:', error);
