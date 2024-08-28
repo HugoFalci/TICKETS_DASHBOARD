@@ -1,11 +1,46 @@
 <template>
-  <v-container class="bg-red">
+  <v-container class="">
     <v-row>
-      <v-col cols="5" class="bg-blue">
+      <v-col cols="3" class="">
+        <v-row>
+          <v-card
+            class="mt-5 ml-16 bg-white"
+            variant="variant"
+            title="STATUS DOS TICKETS"
+          >
+          <v-card-subtitle>
+            Total de tickets em aberto: 
+          </v-card-subtitle>
+
+            <v-list>
+              <v-list-item-group>
+                <v-list-item
+                  v-for="(count, status) in contarTicketsPorStatus"
+                  :key="status"
+                  class=""
+                >
+                  <div
+                    :style="{ backgroundColor: getColor(status) }"
+                    class="status-bolinha mr-3"
+                  ></div>
+
+                  <v-list-item-content>
+                    <v-list-item-title class="d-inline-block"
+                      >{{ status }}: <b>{{ count }}</b></v-list-item-title
+                    >
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list-item-group>
+            </v-list>
+          </v-card>
+        </v-row>
+      </v-col>
+
+      <v-col cols="5" class="">
         <v-row>
           <v-card
             class="mt-5 pr-4"
-            variant="outlined"
+            variant="tonal"
             title="TICKETS ABERTOS NO MÊS"
           >
             <div
@@ -17,7 +52,7 @@
 
           <v-card
             class="mt-5 ml-5 pr-3"
-            variant="outlined"
+            variant="tonal"
             title="TICKETS ABERTOS NA SEMANA"
           >
             <div
@@ -29,11 +64,7 @@
         </v-row>
 
         <v-row>
-          <v-card
-            class="mt-5"
-            variant="outlined"
-            title="TICKETS FECHADOS NO MÊS"
-          >
+          <v-card class="mt-5" variant="tonal" title="TICKETS FECHADOS NO MÊS">
             <div
               class="d-flex justify-center pt-5 pb-5 text-h1 font-weight-black"
             >
@@ -43,7 +74,7 @@
 
           <v-card
             class="mt-5 ml-5"
-            variant="outlined"
+            variant="tonal"
             title="TICKETS FECHADOS NA SEMANA"
           >
             <div
@@ -51,43 +82,6 @@
             >
               {{ quantidadeTicketsFechadosSemana }}
             </div>
-          </v-card>
-        </v-row>
-      </v-col>
-
-      <v-col cols="3" class="bg-green">
-        <v-row>
-          <v-card
-            class="mt-5 ml-16"
-            variant="outlined"
-            title="STATUS DOS TICKETS"
-          >
-            <v-list>
-              <v-list-item-group>
-                <v-list-item
-                  v-for="(count, status) in contarTicketsPorStatus"
-                  :key="status"
-                  class=""
-                >
-                  <!-- Bolinha de cor -->
-                  <div
-                    :style="{ backgroundColor: getColor(status) }"
-                    class="status-bolinha mr-3"
-                  ></div>
-                  <div>
-                    <!-- Nome do Status -->
-                    <v-list-item-content>
-                      <v-list-item-title class="bg-orange d-flex justify-start">{{ status }}</v-list-item-title>
-                    </v-list-item-content>
-                  </div>
-
-                  <!-- Quantidade de Tickets -->
-                  <v-list-item-content class="text-right">
-                    <v-list-item-title>{{ count }}</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list-item-group>
-            </v-list>
           </v-card>
         </v-row>
       </v-col>

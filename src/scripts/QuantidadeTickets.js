@@ -10,6 +10,9 @@ export class QuantidadeTickets {
         }).toString();
         const data = await fetchTasks(query);
 
+        console.log(TratamentoDatas.segundaDaSemana());
+        console.log(TratamentoDatas.diaAtual());
+
         if (Array.isArray(data.tasks)) {
             return data.tasks.length;
         } else {
