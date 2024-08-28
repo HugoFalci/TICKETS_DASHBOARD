@@ -81,7 +81,7 @@ export class QuantidadeTickets {
             }
         });
 
-        return JSON.stringify(statusCount, null, 2);
+        return statusCount;
     }
 };
 
