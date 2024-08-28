@@ -10,9 +10,6 @@ export class QuantidadeTickets {
         }).toString();
         const data = await fetchTasks(query);
 
-        console.log(TratamentoDatas.segundaDaSemana());
-        console.log(TratamentoDatas.diaAtual());
-
         if (Array.isArray(data.tasks)) {
             return data.tasks.length;
         } else {
@@ -71,8 +68,13 @@ export class QuantidadeTickets {
     }
 
     async contarTicketsPorStatus() {
+        const query = new URLSearchParams({
+            include_closed: 'false'
+        })
         const statusCount = {};
-        const data = await fetchTasksTags();
+        let totalTicket = 0;
+
+        const data = await fetchTasks(query);
         
         data.tasks.forEach(task => {
             const status = task.status.status;
@@ -82,9 +84,11 @@ export class QuantidadeTickets {
             } else {
                 statusCount[status] = 1;
             }
-        });
 
-        return statusCount;
+            totalTicket ++;
+        });
+        console.log(totalTicket);
+        return {statusCount, totalTicket};
     }
 };
 
