@@ -23,7 +23,7 @@
         </v-row>
       </v-col>
 
-      <v-col cols="2" class="mt-2">
+      <v-col cols="2" class="mt-2 ml-2">
         <v-row>
           <v-col>
             <v-card class="color-custom" variant="variant" title="STATUS TICKETS">
