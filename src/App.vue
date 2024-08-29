@@ -1,10 +1,10 @@
 <template>
-  <v-app class="bg-blue-lighten-5">
+  <v-app class="bg-custom">
     <Cabecalho />
     <v-main>
       <Home />
     </v-main>
-    <AppFooter class="bg-blue-lighten-5"/>
+    <AppFooter class="bg-custom"/>
   </v-app>
 </template>
 
@@ -13,3 +13,9 @@ import Cabecalho from "././components/Cabecalho.vue";
 import AppFooter from "././components/AppFooter.vue";
 import Home from "./components/Home.vue";
 </script>
+
+<style scoped>
+.bg-custom {
+  background-color: #17181A;
+}
+</style>

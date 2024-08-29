@@ -8,6 +8,7 @@ export class QuantidadeTickets {
             date_created_lt: TratamentoDatas.convertData(TratamentoDatas.diaAtual()), // Data de fim
             include_closed: 'true'           // Status dos tickets
         }).toString();
+        
         const data = await fetchTasks(query);
 
         if (Array.isArray(data.tasks)) {
@@ -24,6 +25,7 @@ export class QuantidadeTickets {
             date_created_lt: TratamentoDatas.convertData(TratamentoDatas.diaAtual()), // Data de fim
             include_closed: 'true'           // Status dos tickets
         }).toString();
+
         const data = await fetchTasks(query);
 
         if (Array.isArray(data.tasks)) {
@@ -40,6 +42,7 @@ export class QuantidadeTickets {
             date_updated_lt: TratamentoDatas.convertData(TratamentoDatas.diaAtual()), // Data de fim
             'statuses[]': ['Fechado']           // Status dos tickets
         }).toString();
+
         const data = await fetchTasks(query);
 
         if (Array.isArray(data.tasks)) {
@@ -56,7 +59,7 @@ export class QuantidadeTickets {
             date_updated_lt: TratamentoDatas.convertData(TratamentoDatas.diaAtual()), // Data de fim
             'statuses[]': ['Fechado']           // Status dos tickets
         }).toString();
-        console.log(query);
+        
         const data = await fetchTasks(query);
 
         if (Array.isArray(data.tasks)) {
@@ -68,21 +71,21 @@ export class QuantidadeTickets {
     }
 };
 
-async function run() {
-    try {
-        const analise = new QuantidadeTickets;
-        // console.log(`Quantidade de tickets ABERTOS neste mês: ${await analise.quantidadeTicketsAbertosMes()}`);
-        // console.log(`Quantidade de tickets ABERTOS nesta semana: ${await analise.quantidadeTicketsAbertosSemana()}`);
-        // console.log(`Quantidade de tickets FECHADOS neste mês: ${await analise.quantidadeTicketsFechadosMes()}`);
-        // console.log(`Quantidade de tickets FECHADOS nesta semana: ${await analise.quantidadeTicketsFechadosSemana()}`);
-        // console.log(`Tickets por status: ${await analise.contarTicketsPorPrioridade()}`)
-            ;
-    } catch (error) {
-        console.error('Erro ao buscar tarefas:', error);
-    }
-}
+// async function run() {
+//     try {
+//         const analise = new QuantidadeTickets;
+//         // console.log(`Quantidade de tickets ABERTOS neste mês: ${await analise.quantidadeTicketsAbertosMes()}`);
+//         // console.log(`Quantidade de tickets ABERTOS nesta semana: ${await analise.quantidadeTicketsAbertosSemana()}`);
+//         // console.log(`Quantidade de tickets FECHADOS neste mês: ${await analise.quantidadeTicketsFechadosMes()}`);
+//         // console.log(`Quantidade de tickets FECHADOS nesta semana: ${await analise.quantidadeTicketsFechadosSemana()}`);
+//         // console.log(`Tickets por status: ${await analise.contarTicketsPorPrioridade()}`)
+//             ;
+//     } catch (error) {
+//         console.error('Erro ao buscar tarefas:', error);
+//     }
+// }
 
-run();
+// run();
 
 
 

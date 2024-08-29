@@ -2,19 +2,19 @@
   <v-container class="">
     <v-row>
       <v-col cols="2" class="mt-2">
-        <v-row>
-          <v-col>
-            <v-card class="bg-white" variant="variant" title="STATUS TICKETS">
-              <v-card-subtitle>
-                Total de tickets em aberto: {{ totalTicketsEmAberto }}
-              </v-card-subtitle>
-              <v-list class="mt-3">
+        <v-row class="">
+          <v-col cols="" class="">
+            <v-card class="color-custom" variant="variant" title="TOP TAGS">
+              <v-list class="color-custom">
                 <v-list-item-group>
-                  <v-list-item v-for="(count, status) in contarTicketsPorStatus" :key="status" class="">
-                    <div :style="{ backgroundColor: getColor(status) }" class="status-bolinha mr-3"></div>
-                    <v-list-item-content>
-                      <v-list-item-title class="d-inline-block">{{ status }}: <b>{{ count }}</b></v-list-item-title>
-                    </v-list-item-content>
+                  <v-list-item v-for="(count, status) in contarTicketsPorTags" :key="status" class="">
+                    <v-row>
+                      <v-col cols="7">
+                        <v-list-item-content>
+                          <v-list-item-title class="d-inline-block"><b>{{ count }}</b></v-list-item-title>
+                        </v-list-item-content>
+                      </v-col>
+                    </v-row>
                   </v-list-item>
                 </v-list-item-group>
               </v-list>
@@ -23,19 +23,49 @@
         </v-row>
       </v-col>
 
-      {{ contarTicketsPorTags }}
-
       <v-col cols="2" class="mt-2">
+        <v-row>
+          <v-col>
+            <v-card class="color-custom" variant="variant" title="STATUS TICKETS">
+              <v-card-subtitle>
+                Total de tickets em aberto: {{ totalTicketsEmAberto }}
+              </v-card-subtitle>
+              <v-list class="mt-3 color-custom">
+                <v-list-item-group>
+                  <v-list-item v-for="(count, status) in ordenarStatus(contarTicketsPorStatus)" :key="status" class="">
+                    <v-row>
+                      <v-col cols="1" class="mt-1">
+                        <div :style="{ backgroundColor: getColor(status) }" class="status-bolinha mr-3"></div>
+                      </v-col>
+                      <v-col cols="9">
+                        <v-list-item-content>
+                          <v-list-item-title class="d-inline-block">{{ status }}: <b>{{ count }}</b></v-list-item-title>
+                        </v-list-item-content>
+                      </v-col>
+                    </v-row>
+                  </v-list-item>
+                </v-list-item-group>
+              </v-list>
+            </v-card>
+          </v-col>
+        </v-row>
+
         <v-row class="">
           <v-col cols="" class="">
-            <v-card class="bg-white " variant="variant" title="PRIORIDADES">
-              <v-list class="">
+            <v-card class="color-custom " variant="variant" title="PRIORIDADES">
+              <v-list class="color-custom">
                 <v-list-item-group>
                   <v-list-item v-for="(count, status) in contarTicketsPorPrioridade" :key="status" class="">
-                    <div :style="{ backgroundColor: getColor(status) }" class="status-bolinha mr-3"></div>
-                    <v-list-item-content>
-                      <v-list-item-title class="d-inline-block">{{ status }}: <b>{{ count }}</b></v-list-item-title>
-                    </v-list-item-content>
+                    <v-row>
+                      <v-col cols="1" class="mt-1">
+                        <div :style="{ backgroundColor: getColor(status) }" class="status-bolinha mr-3"></div>
+                      </v-col>
+                      <v-col cols="7">
+                        <v-list-item-content>
+                          <v-list-item-title class="d-inline-block">{{ status }}: <b>{{ count }}</b></v-list-item-title>
+                        </v-list-item-content>
+                      </v-col>
+                    </v-row>
                   </v-list-item>
                 </v-list-item-group>
               </v-list>
@@ -46,13 +76,13 @@
 
       <v-col cols="5" class="ml-5">
         <v-row>
-          <v-card class="mt-5 pr-4" variant="tonal" title="TICKETS ABERTOS NO MÊS">
+          <v-card class="mt-5 pr-4 color-custom" variant="tonal" title="TICKETS ABERTOS NO MÊS">
             <div class="d-flex justify-center pt-5 pb-5 text-h1 font-weight-black">
               {{ quantidadeTicketsAbertosMes }}
             </div>
           </v-card>
 
-          <v-card class="mt-5 ml-5 pr-3" variant="tonal" title="TICKETS ABERTOS NA SEMANA">
+          <v-card class="mt-5 ml-5 pr-3 color-custom" variant="tonal" title="TICKETS ABERTOS NA SEMANA">
             <div class="d-flex justify-center pt-5 pb-5 text-h1 font-weight-black">
               {{ quantidadeTicketsAbertosSemana }}
             </div>
@@ -60,13 +90,13 @@
         </v-row>
 
         <v-row>
-          <v-card class="mt-5" variant="tonal" title="TICKETS FECHADOS NO MÊS">
+          <v-card class="mt-5" variant="tonal color-custom" title="TICKETS FECHADOS NO MÊS">
             <div class="d-flex justify-center pt-5 pb-5 text-h1 font-weight-black">
               {{ quantidadeTicketsFechadosMes }}
             </div>
           </v-card>
 
-          <v-card class="mt-5 ml-5" variant="tonal" title="TICKETS FECHADOS NA SEMANA">
+          <v-card class="mt-5 ml-5 color-custom" variant="tonal" title="TICKETS FECHADOS NA SEMANA">
             <div class="d-flex justify-center pt-5 pb-5 text-h1 font-weight-black">
               {{ quantidadeTicketsFechadosSemana }}
             </div>
@@ -112,20 +142,44 @@ export default {
     }
   },
   methods: {
+    ordenarStatus(statusCount) {
+      const ordemDesejada = [
+        "a fazer",
+        "em desenvolvimento",
+        "negado dev",
+        "ag. info",
+        "reprovado qa",
+        "ag. publicação",
+        "publicado dev",
+        "publicado master",
+        "retornar cliente"
+      ];
+
+      const statusCountOrdenados = {};
+
+      ordemDesejada.forEach(status => {
+        if (statusCount[status] !== undefined) {
+          statusCountOrdenados[status] = statusCount[status];
+        }
+      });
+
+      return statusCountOrdenados;
+    },
+
     getColor(status) {
       const colors = {
-        "a fazer": "#f44336",
-        "em desenvolvimento": "#ff9800",
-        "publicado dev": "#4caf50",
-        "publicado master": "#2196f3",
-        "ag. publicação": "#9c27b0",
-        "retornar cliente": "#e91e63",
-        "ag. info": "#3f51b5",
-        "negado dev": "#f44336",
-        "reprovado qa": "#607d8b",
-        "urgent": "red",
-        "high": "yellow",
-        "normal": "grey"
+        "a fazer": "#FFC107",
+        "em desenvolvimento": "#6985FF",
+        "publicado dev": "#E78945",
+        "publicado master": "#33A069",
+        "ag. publicação": "#C580E6",
+        "retornar cliente": "#40A6E6",
+        "ag. info": "#E78945",
+        "negado dev": "#DC646A",
+        "reprovado qa": "#F9BE33",
+        "urgent": "#E38388",
+        "high": "#FBCB5C",
+        "normal": "#879DFF"
       };
       return colors[status] || "#ccc";
     },
@@ -138,5 +192,9 @@ export default {
   width: 15px;
   height: 15px;
   border-radius: 50%;
+}
+
+.color-custom {
+  background-color: #404040;
 }
 </style>

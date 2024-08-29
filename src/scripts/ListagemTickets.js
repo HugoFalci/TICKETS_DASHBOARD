@@ -50,17 +50,44 @@ export class ListagemTickets {
         const allTags = {}
 
         api.tasks.forEach(task => {
-            const tagsTickets = task.custom_fields.find((teste) => teste.name === "Tags").value.forEach();
-            console.log(tagsTickets);
+            const tagsTickets = task.custom_fields.find((tagTicket) => tagTicket.name === "Tags").value;
+            // console.log(tagsTickets);
 
-            if (allTags[tagsTickets]) {
-                allTags[tagsTickets]++;
+            if (Array.isArray(tagsTickets)) {
+                tagsTickets.forEach(tag => {
+                    if (allTags[tag]) {
+                        allTags[tag]++;
+                    } else {
+                        allTags[tag] = 1;
+                    }
+                });
             } else {
-                allTags[tagsTickets] = 1;
+                console.error('A tag não é um array: ', tagsTickets);
             }
         });
+        // console.log(allTags);
 
         return allTags;
+    }
+
+    async renomearTag(idTag, api) {
+        const tagsRenomeadas = {};
+        const nomesTags = api.tasks[0].custom_fields.find((tagTicket) => tagTicket.name === "Tags").type_config.options;        
+
+        for(const [id, value] of Object.entries(idTag)) {
+            const acharNomeTag = nomesTags.find(item => item.id === id);
+
+            if (acharNomeTag) {
+                tagsRenomeadas[acharNomeTag.label] = value;
+            } else {
+                tagsRenomeadas[id];
+            }
+        }
+        
+        const tagsOrdenadas = Object.fromEntries(Object.entries(tagsRenomeadas).sort(([, a], [, b]) => b - a));
+        const topTags = Object.entries(tagsOrdenadas).slice(0,10);
+
+        return topTags;
     }
 
     async contarTicketsPorTags() {
@@ -69,24 +96,28 @@ export class ListagemTickets {
         })
 
         const data = await fetchTasks(query);
-        const tagsDosTickets = await this.buscarTagPorId(data)
+        const idDosTickets = await this.buscarTagPorId(data)
+        const tagsDosTickets = await this.renomearTag(idDosTickets, data)
+        const tagFormatada = tagsDosTickets.map(([tag, quantidade], index) => {
+            return `${tag}: ${quantidade}`;
+        })
 
-        return tagsDosTickets;
+        return tagFormatada;
     }
 }
 
-async function run() {
-    try {
-        const analise = new ListagemTickets;
-        // console.log(`Quantidade de tickets ABERTOS neste mês: ${await analise.quantidadeTicketsAbertosMes()}`);
-        // console.log(`Quantidade de tickets ABERTOS nesta semana: ${await analise.quantidadeTicketsAbertosSemana()}`);
-        // console.log(`Quantidade de tickets FECHADOS neste mês: ${await analise.quantidadeTicketsFechadosMes()}`);
-        // console.log(`Quantidade de tickets FECHADOS nesta semana: ${await analise.quantidadeTicketsFechadosSemana()}`);
-        console.log(`Tickets por status: ${await analise.contarTicketsPorTags()}`)
-            ;
-    } catch (error) {
-        console.error('Erro ao buscar tarefas:', error);
-    }
-}
+// async function run() {
+//     try {
+//         const analise = new ListagemTickets;
+//         // console.log(`Quantidade de tickets ABERTOS neste mês: ${await analise.quantidadeTicketsAbertosMes()}`);
+//         // console.log(`Quantidade de tickets ABERTOS nesta semana: ${await analise.quantidadeTicketsAbertosSemana()}`);
+//         // console.log(`Quantidade de tickets FECHADOS neste mês: ${await analise.quantidadeTicketsFechadosMes()}`);
+//         // console.log(`Quantidade de tickets FECHADOS nesta semana: ${await analise.quantidadeTicketsFechadosSemana()}`);
+//         console.log(`Tickets por status: ${JSON.stringify(await analise.contarTicketsPorTags(), null, 2)}`)
+//             ;
+//     } catch (error) {
+//         console.error('Erro ao buscar tarefas:', error);
+//     }
+// }
 
-run();
+// run();
