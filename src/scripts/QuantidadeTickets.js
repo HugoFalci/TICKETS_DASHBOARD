@@ -8,7 +8,7 @@ export class QuantidadeTickets {
             date_created_lt: TratamentoDatas.convertData(TratamentoDatas.diaAtual()), // Data de fim
             include_closed: 'true'           // Status dos tickets
         }).toString();
-        
+
         const data = await fetchTasks(query);
 
         if (Array.isArray(data.tasks)) {
@@ -59,7 +59,7 @@ export class QuantidadeTickets {
             date_updated_lt: TratamentoDatas.convertData(TratamentoDatas.diaAtual()), // Data de fim
             'statuses[]': ['Fechado']           // Status dos tickets
         }).toString();
-        
+
         const data = await fetchTasks(query);
 
         if (Array.isArray(data.tasks)) {

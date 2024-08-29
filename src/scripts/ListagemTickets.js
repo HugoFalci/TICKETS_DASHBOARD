@@ -72,9 +72,9 @@ export class ListagemTickets {
 
     async renomearTag(idTag, api) {
         const tagsRenomeadas = {};
-        const nomesTags = api.tasks[0].custom_fields.find((tagTicket) => tagTicket.name === "Tags").type_config.options;        
+        const nomesTags = api.tasks[0].custom_fields.find((tagTicket) => tagTicket.name === "Tags").type_config.options;
 
-        for(const [id, value] of Object.entries(idTag)) {
+        for (const [id, value] of Object.entries(idTag)) {
             const acharNomeTag = nomesTags.find(item => item.id === id);
 
             if (acharNomeTag) {
@@ -83,9 +83,9 @@ export class ListagemTickets {
                 tagsRenomeadas[id];
             }
         }
-        
+
         const tagsOrdenadas = Object.fromEntries(Object.entries(tagsRenomeadas).sort(([, a], [, b]) => b - a));
-        const topTags = Object.entries(tagsOrdenadas).slice(0,10);
+        const topTags = Object.entries(tagsOrdenadas).slice(0, 10);
 
         return topTags;
     }
@@ -103,6 +103,10 @@ export class ListagemTickets {
         })
 
         return tagFormatada;
+    }
+
+    async ticketsAtrasados() {
+        
     }
 }
 
