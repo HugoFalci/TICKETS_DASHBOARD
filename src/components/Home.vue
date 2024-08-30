@@ -24,6 +24,29 @@
       </v-col>
 
       <v-col cols="2" class="mt-2 ml-2">
+        <v-row class="">
+          <v-col cols="" class="">
+            <v-card class="color-custom " variant="variant" title="PRIORIDADES">
+              <v-list class="color-custom">
+                <v-list-item-group>
+                  <v-list-item v-for="(count, status) in contarTicketsPorPrioridade" :key="status" class="">
+                    <v-row>
+                      <v-col cols="1" class="mt-1">
+                        <div :style="{ backgroundColor: getColor(status) }" class="status-bolinha mr-3"></div>
+                      </v-col>
+                      <v-col cols="7">
+                        <v-list-item-content>
+                          <v-list-item-title class="d-inline-block">{{ status }}: <b>{{ count }}</b></v-list-item-title>
+                        </v-list-item-content>
+                      </v-col>
+                    </v-row>
+                  </v-list-item>
+                </v-list-item-group>
+              </v-list>
+            </v-card>
+          </v-col>
+        </v-row>
+        
         <v-row>
           <v-col>
             <v-card class="color-custom" variant="variant" title="STATUS TICKETS">
@@ -50,28 +73,6 @@
           </v-col>
         </v-row>
 
-        <v-row class="">
-          <v-col cols="" class="">
-            <v-card class="color-custom " variant="variant" title="PRIORIDADES">
-              <v-list class="color-custom">
-                <v-list-item-group>
-                  <v-list-item v-for="(count, status) in contarTicketsPorPrioridade" :key="status" class="">
-                    <v-row>
-                      <v-col cols="1" class="mt-1">
-                        <div :style="{ backgroundColor: getColor(status) }" class="status-bolinha mr-3"></div>
-                      </v-col>
-                      <v-col cols="7">
-                        <v-list-item-content>
-                          <v-list-item-title class="d-inline-block">{{ status }}: <b>{{ count }}</b></v-list-item-title>
-                        </v-list-item-content>
-                      </v-col>
-                    </v-row>
-                  </v-list-item>
-                </v-list-item-group>
-              </v-list>
-            </v-card>
-          </v-col>
-        </v-row>
       </v-col>
 
       <v-col cols="5" class="ml-5">

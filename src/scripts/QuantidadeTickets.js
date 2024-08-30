@@ -69,23 +69,43 @@ export class QuantidadeTickets {
             return 0;
         }
     }
+
+    async quantidadeticketsAtrasados() {
+        let quantidadeTicketsAtrasados = 0;
+
+        const query = new URLSearchParams({
+            include_closed: 'false'
+        }).toString();
+
+        const data = await fetchTasks(query);
+
+        data.tasks.forEach(task => {
+            const dataVencimento = task.due_date;
+            
+            if(dataVencimento < TratamentoDatas.diaAtual()) {
+                quantidadeTicketsAtrasados ++;
+            }
+        });
+        console.log(quantidadeTicketsAtrasados);
+        
+    }
 };
 
-// async function run() {
-//     try {
-//         const analise = new QuantidadeTickets;
-//         // console.log(`Quantidade de tickets ABERTOS neste mês: ${await analise.quantidadeTicketsAbertosMes()}`);
-//         // console.log(`Quantidade de tickets ABERTOS nesta semana: ${await analise.quantidadeTicketsAbertosSemana()}`);
-//         // console.log(`Quantidade de tickets FECHADOS neste mês: ${await analise.quantidadeTicketsFechadosMes()}`);
-//         // console.log(`Quantidade de tickets FECHADOS nesta semana: ${await analise.quantidadeTicketsFechadosSemana()}`);
-//         // console.log(`Tickets por status: ${await analise.contarTicketsPorPrioridade()}`)
-//             ;
-//     } catch (error) {
-//         console.error('Erro ao buscar tarefas:', error);
-//     }
-// }
+async function run() {
+    try {
+        const analise = new QuantidadeTickets;
+        // console.log(`Quantidade de tickets ABERTOS neste mês: ${await analise.quantidadeTicketsAbertosMes()}`);
+        // console.log(`Quantidade de tickets ABERTOS nesta semana: ${await analise.quantidadeTicketsAbertosSemana()}`);
+        // console.log(`Quantidade de tickets FECHADOS neste mês: ${await analise.quantidadeTicketsFechadosMes()}`);
+        // console.log(`Quantidade de tickets FECHADOS nesta semana: ${await analise.quantidadeTicketsFechadosSemana()}`);
+        console.log(`Tickets por status: ${await analise.quantidadeticketsAtrasados()}`)
+            ;
+    } catch (error) {
+        console.error('Erro ao buscar tarefas:', error);
+    }
+}
 
-// run();
+run();
 
 
 

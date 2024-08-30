@@ -106,7 +106,7 @@ export class ListagemTickets {
     }
 
     async ticketsAtrasados() {
-        
+        // Listar tickets que estão atrasados
     }
 }
 
