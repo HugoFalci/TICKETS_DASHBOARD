@@ -70,24 +70,43 @@ export class QuantidadeTickets {
         }
     }
 
-    async quantidadeticketsAtrasados() {
-        let quantidadeTicketsAtrasados = 0;
+    async quantidadeTicketsPendentesRetornoCliente() {
+        const query = new URLSearchParams();
+        query.append('include_closed', 'false');
 
+        const statuses = ['ag. publicação', 'publicado dev', 'publicado master', 'retornar cliente'];
+        statuses.forEach(status => query.append('statuses[]', status));
+
+        const data = await fetchTasks(query.toString());
+
+        const quantidadeTicketsPendentesRetornoCliente = data.tasks.length;
+
+        console.log('Quantidade de tickets pendentes de retorno ao cliente: ', quantidadeTicketsPendentesRetornoCliente);
+        return quantidadeTicketsPendentesRetornoCliente; // Pendente de front
+    }
+
+    async totalticketsAtrasados() {
         const query = new URLSearchParams({
             include_closed: 'false'
         }).toString();
 
         const data = await fetchTasks(query);
 
+        let totalticketsAtrasados = 0;
+        const tituloticketsAtrasados = {};
+
         data.tasks.forEach(task => {
             const dataVencimento = task.due_date;
-            
-            if(dataVencimento < TratamentoDatas.diaAtual()) {
-                quantidadeTicketsAtrasados ++;
+
+            if (dataVencimento < TratamentoDatas.dataMilisegundos()) {
+                tituloticketsAtrasados[task.name] = true;
+
+                totalticketsAtrasados++;
             }
         });
-        console.log(quantidadeTicketsAtrasados);
-        
+        console.log('Total de tickets atrasados: ', totalticketsAtrasados);
+        console.log('Titulo dos tickets atrasados: ', tituloticketsAtrasados);
+        return { totalticketsAtrasados, tituloticketsAtrasados }; // Pendentes de front
     }
 };
 
@@ -98,21 +117,12 @@ async function run() {
         // console.log(`Quantidade de tickets ABERTOS nesta semana: ${await analise.quantidadeTicketsAbertosSemana()}`);
         // console.log(`Quantidade de tickets FECHADOS neste mês: ${await analise.quantidadeTicketsFechadosMes()}`);
         // console.log(`Quantidade de tickets FECHADOS nesta semana: ${await analise.quantidadeTicketsFechadosSemana()}`);
-        console.log(`Tickets por status: ${await analise.quantidadeticketsAtrasados()}`)
-            ;
+        await analise.quantidadeTicketsPendentesRetornoCliente();
+        await analise.totalticketsAtrasados();
+        ;
     } catch (error) {
         console.error('Erro ao buscar tarefas:', error);
     }
 }
 
 run();
-
-
-
-/* 
-Prazo de entrega dos tickets
-Tempo de vida
-Top tags utilizadas
-Tickets fechados
-Atualizar a data de criação para a Data da solicitação (campos adicionais)
-*/

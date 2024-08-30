@@ -4,7 +4,7 @@
       <v-col cols="2" class="mt-2">
         <v-row class="">
           <v-col cols="" class="">
-            <v-card class="color-custom" variant="variant" title="TOP TAGS">
+            <v-card class="color-custom" variant="variant" title="TOP TAGS UTILIZADAS">
               <v-list class="color-custom">
                 <v-list-item-group>
                   <v-list-item v-for="(count, status) in contarTicketsPorTags" :key="status" class="">
@@ -46,7 +46,7 @@
             </v-card>
           </v-col>
         </v-row>
-        
+
         <v-row>
           <v-col>
             <v-card class="color-custom" variant="variant" title="STATUS TICKETS">
@@ -72,10 +72,9 @@
             </v-card>
           </v-col>
         </v-row>
-
       </v-col>
 
-      <v-col cols="5" class="ml-5">
+      <v-col cols="5" class="ml-5 mr-n12">
         <v-row>
           <v-card class="mt-5 pr-4 color-custom" variant="tonal" title="TICKETS ABERTOS NO MÊS">
             <div class="d-flex justify-center pt-5 pb-5 text-h1 font-weight-black">
@@ -83,7 +82,7 @@
             </div>
           </v-card>
 
-          <v-card class="mt-5 ml-5 pr-3 color-custom" variant="tonal" title="TICKETS ABERTOS NA SEMANA">
+          <v-card class="mt-5 ml-5 pr-4 color-custom" variant="tonal" title="TICKETS ABERTOS NA SEMANA">
             <div class="d-flex justify-center pt-5 pb-5 text-h1 font-weight-black">
               {{ quantidadeTicketsAbertosSemana }}
             </div>
@@ -100,6 +99,19 @@
           <v-card class="mt-5 ml-5 color-custom" variant="tonal" title="TICKETS FECHADOS NA SEMANA">
             <div class="d-flex justify-center pt-5 pb-5 text-h1 font-weight-black">
               {{ quantidadeTicketsFechadosSemana }}
+            </div>
+          </v-card>
+        </v-row>
+      </v-col>
+
+      <v-col class="mt-5">
+        <v-row>
+          <v-card class="color-custom  pb-1" variant="tonal">
+            <v-card-title class="bg-red">
+              TOTAL TICKETS ATRASADOS
+            </v-card-title>
+            <div class="d-flex justify-center pt-5 pb-5 text-h1 font-weight-black text-red">
+              {{ totalticketsAtrasados }}
             </div>
           </v-card>
         </v-row>
@@ -122,7 +134,8 @@ export default {
       contarTicketsPorStatus: {},
       contarTicketsPorPrioridade: {},
       contarTicketsPorTags: {},
-      totalTicketsEmAberto: 0
+      totalTicketsEmAberto: 0,
+      totalticketsAtrasados: 0
     };
   },
   async mounted() {
@@ -138,6 +151,7 @@ export default {
       this.contarTicketsPorPrioridade = await listagemTickets.contarTicketsPorPrioridade();
       this.totalTicketsEmAberto = (await listagemTickets.contarTicketsPorStatus()).totalTicket;
       this.contarTicketsPorTags = (await listagemTickets.contarTicketsPorTags());
+      this.totalticketsAtrasados = (await quantidadeTickets.totalticketsAtrasados()).totalticketsAtrasados;
     } catch (error) {
       console.error("Erro ao buscar tarefa: ", error);
     }

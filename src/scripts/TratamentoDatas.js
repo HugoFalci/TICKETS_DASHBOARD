@@ -22,7 +22,12 @@ export class TratamentoDatas {
         const segundaFeira = new Date(diaAtual.setDate(diff));
         return segundaFeira.toISOString().split('T')[0] + 'T00:00:00.000Z';
     }
-
+    
+    static dataMilisegundos() {
+        const dataAtual = this.diaAtual();
+        const dataMilisegundos = new Date(dataAtual);
+        return dataMilisegundos.getTime();
+    }
 }
 
 export default TratamentoDatas;
