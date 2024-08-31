@@ -102,18 +102,38 @@
             </div>
           </v-card>
         </v-row>
+
+        <v-row>
+          <v-col cols="11">
+            <v-card class="mt-2 ml-n3 mr-1 ticket-data-table">
+              <v-list class="color-custom">
+                <v-list-item-group>
+                  <v-list-item v-for="(data, title) in (tituloticketsAtrasados)" :key="title" class="">
+                    <v-row>
+                      <v-col cols="9">
+                        <v-list-item-content>
+                          <v-list-item-title class="d-inline-block"><b>{{ title }}</b> | {{ data }}</v-list-item-title>
+                        </v-list-item-content>
+                      </v-col>
+                    </v-row>
+                  </v-list-item>
+                </v-list-item-group>
+              </v-list>
+            </v-card>
+          </v-col>
+        </v-row>
       </v-col>
 
-      <v-col class="mt-5">
+      <v-col class="mt-2 ml-1">
         <v-row>
-          <v-card class="color-custom  pb-1" variant="tonal">
-            <v-card-title class="bg-red">
-              TOTAL TICKETS ATRASADOS
-            </v-card-title>
-            <div class="d-flex justify-center pt-5 pb-5 text-h1 font-weight-black text-red">
-              {{ totalticketsAtrasados }}
-            </div>
-          </v-card>
+          <v-col>
+            <v-card class="color-custom pb-1" variant="tonal">
+              <v-card-title class="bg-red px-16">
+                TOTAL TICKETS ATRASADOS
+              </v-card-title>
+              <canvas class="mt-3" id="TicketPieChart"></canvas>
+            </v-card>
+          </v-col>
         </v-row>
       </v-col>
     </v-row>
@@ -123,6 +143,7 @@
 <script>
 import { QuantidadeTickets } from "@/scripts/QuantidadeTickets.js";
 import { ListagemTickets } from "@/scripts/ListagemTickets.js";
+import Chart from 'chart.js/auto';
 
 export default {
   data() {
@@ -135,28 +156,46 @@ export default {
       contarTicketsPorPrioridade: {},
       contarTicketsPorTags: {},
       totalTicketsEmAberto: 0,
-      totalticketsAtrasados: 0
+      totalticketsAtrasados: 0,
+      tituloticketsAtrasados: {},
+      refreshInterval: null,
+      chart: null,
     };
   },
   async mounted() {
-    const quantidadeTickets = new QuantidadeTickets();
-    const listagemTickets = new ListagemTickets();
-
-    try {
-      this.quantidadeTicketsAbertosMes = await quantidadeTickets.quantidadeTicketsAbertosMes();
-      this.quantidadeTicketsAbertosSemana = await quantidadeTickets.quantidadeTicketsAbertosSemana();
-      this.quantidadeTicketsFechadosMes = await quantidadeTickets.quantidadeTicketsFechadosMes();
-      this.quantidadeTicketsFechadosSemana = await quantidadeTickets.quantidadeTicketsFechadosSemana();
-      this.contarTicketsPorStatus = (await listagemTickets.contarTicketsPorStatus()).statusCount;
-      this.contarTicketsPorPrioridade = await listagemTickets.contarTicketsPorPrioridade();
-      this.totalTicketsEmAberto = (await listagemTickets.contarTicketsPorStatus()).totalTicket;
-      this.contarTicketsPorTags = (await listagemTickets.contarTicketsPorTags());
-      this.totalticketsAtrasados = (await quantidadeTickets.totalticketsAtrasados()).totalticketsAtrasados;
-    } catch (error) {
-      console.error("Erro ao buscar tarefa: ", error);
-    }
+    this.fetchData();
+    this.startAutoRefresh();
   },
   methods: {
+    async fetchData() {
+      const quantidadeTickets = new QuantidadeTickets();
+      const listagemTickets = new ListagemTickets();
+
+      try {
+        this.quantidadeTicketsAbertosMes = await quantidadeTickets.quantidadeTicketsAbertosMes();
+        this.quantidadeTicketsAbertosSemana = await quantidadeTickets.quantidadeTicketsAbertosSemana();
+        this.quantidadeTicketsFechadosMes = await quantidadeTickets.quantidadeTicketsFechadosMes();
+        this.quantidadeTicketsFechadosSemana = await quantidadeTickets.quantidadeTicketsFechadosSemana();
+        this.contarTicketsPorStatus = (await listagemTickets.contarTicketsPorStatus()).statusCount;
+        this.contarTicketsPorPrioridade = await listagemTickets.contarTicketsPorPrioridade();
+        this.totalTicketsEmAberto = (await listagemTickets.contarTicketsPorStatus()).totalTicket;
+        this.contarTicketsPorTags = (await listagemTickets.contarTicketsPorTags());
+        this.totalticketsAtrasados = (await quantidadeTickets.totalticketsAtrasados()).totalticketsAtrasados;
+        this.quantidadeTicketsPendentesRetornoCliente = (await quantidadeTickets.quantidadeTicketsPendentesRetornoCliente());
+        this.tituloticketsAtrasados = (await quantidadeTickets.totalticketsAtrasados()).tituloticketsAtrasados;
+        this.createChart();
+      } catch (error) {
+        console.error("Erro ao buscar dados: ", error);
+      }
+    },
+    startAutoRefresh() {
+      this.refreshInterval = setInterval(this.fetchData, 300000);
+    },
+    beforeDestroy() {
+      if (this.refreshInterval) {
+        clearInterval(this.refreshInterval);
+      }
+    },
     ordenarStatus(statusCount) {
       const ordemDesejada = [
         "a fazer",
@@ -198,7 +237,49 @@ export default {
       };
       return colors[status] || "#ccc";
     },
-  },
+
+    createChart() {
+      const ctx = document.getElementById('TicketPieChart').getContext('2d');
+
+      new Chart(ctx, {
+        type: 'polarArea',
+        data: {
+          labels: [`Em aberto: ${this.totalTicketsEmAberto}  `, `Atrasados: ${this.totalticketsAtrasados}`, `Pendentes de retorno: ${this.quantidadeTicketsPendentesRetornoCliente}`],
+          datasets: [{
+            data: [this.totalTicketsEmAberto, this.totalticketsAtrasados, this.quantidadeTicketsPendentesRetornoCliente],
+            backgroundColor: ['#33A069', '#FFC107', '#E38388'],
+          }]
+        },
+        options: {
+          responsive: true,
+          layout: {
+            padding: {
+              bottom: 20,
+            }
+          },
+          plugins: {
+            legend: {
+              position: 'top',
+              align: 'start',
+              labels: {
+                boxWidth: 20,
+                padding: 10,
+                color: 'white',
+                font: {
+                  size: 16
+                }
+              }
+            },
+            tootip: {
+              callbacks: {
+                label: (tooltipItem) => `${tooltipItem}: ${tooltipItem.raw}`,
+              }
+            }
+          }
+        }
+      });
+    }
+  }
 };
 </script>
 
@@ -211,5 +292,10 @@ export default {
 
 .color-custom {
   background-color: #404040;
+}
+
+.ticket-data-table {
+  max-height: 305px;
+  overflow-y: auto;
 }
 </style>

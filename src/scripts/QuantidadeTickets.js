@@ -99,7 +99,7 @@ export class QuantidadeTickets {
             const dataVencimento = task.due_date;
 
             if (dataVencimento < TratamentoDatas.dataMilisegundos()) {
-                tituloticketsAtrasados[task.name] = true;
+                tituloticketsAtrasados[task.name] = TratamentoDatas.conversorParaData(dataVencimento);
 
                 totalticketsAtrasados++;
             }
@@ -110,19 +110,19 @@ export class QuantidadeTickets {
     }
 };
 
-async function run() {
-    try {
-        const analise = new QuantidadeTickets;
-        // console.log(`Quantidade de tickets ABERTOS neste mês: ${await analise.quantidadeTicketsAbertosMes()}`);
-        // console.log(`Quantidade de tickets ABERTOS nesta semana: ${await analise.quantidadeTicketsAbertosSemana()}`);
-        // console.log(`Quantidade de tickets FECHADOS neste mês: ${await analise.quantidadeTicketsFechadosMes()}`);
-        // console.log(`Quantidade de tickets FECHADOS nesta semana: ${await analise.quantidadeTicketsFechadosSemana()}`);
-        await analise.quantidadeTicketsPendentesRetornoCliente();
-        await analise.totalticketsAtrasados();
-        ;
-    } catch (error) {
-        console.error('Erro ao buscar tarefas:', error);
-    }
-}
+// async function run() {
+//     try {
+//         const analise = new QuantidadeTickets;
+//         // console.log(`Quantidade de tickets ABERTOS neste mês: ${await analise.quantidadeTicketsAbertosMes()}`);
+//         // console.log(`Quantidade de tickets ABERTOS nesta semana: ${await analise.quantidadeTicketsAbertosSemana()}`);
+//         // console.log(`Quantidade de tickets FECHADOS neste mês: ${await analise.quantidadeTicketsFechadosMes()}`);
+//         // console.log(`Quantidade de tickets FECHADOS nesta semana: ${await analise.quantidadeTicketsFechadosSemana()}`);
+//         await analise.quantidadeTicketsPendentesRetornoCliente();
+//         await analise.totalticketsAtrasados();
+//         ;
+//     } catch (error) {
+//         console.error('Erro ao buscar tarefas:', error);
+//     }
+// }
 
-run();
+// run();

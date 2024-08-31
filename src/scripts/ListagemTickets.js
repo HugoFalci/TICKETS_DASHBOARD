@@ -104,10 +104,6 @@ export class ListagemTickets {
 
         return tagFormatada;
     }
-
-    async ticketsAtrasados() {
-        // Listar tickets que estão atrasados
-    }
 }
 
 // async function run() {
