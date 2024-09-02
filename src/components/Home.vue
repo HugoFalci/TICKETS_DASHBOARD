@@ -244,9 +244,9 @@ export default {
       new Chart(ctx, {
         type: 'pie',
         data: {
-          labels: [`Em aberto: ${this.totalTicketsEmAberto}  `, `Atrasados: ${this.totalticketsAtrasados}`, `Pendentes de retorno: ${this.quantidadeTicketsPendentesRetornoCliente}`],
+          labels: [`Em dia: ${this.totalTicketsEmAberto - this.totalticketsAtrasados}  `, `Atrasados: ${this.totalticketsAtrasados}`, `Pendentes de retorno: ${this.quantidadeTicketsPendentesRetornoCliente}`],
           datasets: [{
-            data: [this.totalTicketsEmAberto, this.totalticketsAtrasados, this.quantidadeTicketsPendentesRetornoCliente],
+            data: [this.totalTicketsEmAberto - this.totalticketsAtrasados, this.totalticketsAtrasados, this.quantidadeTicketsPendentesRetornoCliente],
             backgroundColor: ['#33A069', '#FFC107', '#E38388'],
           }]
         },
