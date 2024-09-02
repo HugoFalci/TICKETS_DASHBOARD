@@ -1,4 +1,4 @@
-import { fetchTasks, fetchTasksTags } from '../http/api.js'
+import { fetchTasks} from '../http/api.js'
 
 export class ListagemTickets {
     async contarTicketsPorStatus() {

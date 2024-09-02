@@ -112,7 +112,7 @@
                     <v-row>
                       <v-col cols="9">
                         <v-list-item-content>
-                          <v-list-item-title class="d-inline-block"><b>{{ title }}</b> | {{ data }}</v-list-item-title>
+                          <v-list-item-title class="d-inline-block"><b>{{ title }}</b> | <span class="text-red">{{ data }}</span></v-list-item-title>
                         </v-list-item-content>
                       </v-col>
                     </v-row>
@@ -124,7 +124,7 @@
         </v-row>
       </v-col>
 
-      <v-col class="mt-2 ml-1">
+      <v-col class="mt-2 ml-1" md="3">
         <v-row>
           <v-col>
             <v-card class="color-custom pb-1" variant="tonal">
@@ -152,11 +152,11 @@ export default {
       quantidadeTicketsAbertosSemana: 0,
       quantidadeTicketsFechadosMes: 0,
       quantidadeTicketsFechadosSemana: 0,
+      totalTicketsEmAberto: 0,
+      totalticketsAtrasados: 0,
       contarTicketsPorStatus: {},
       contarTicketsPorPrioridade: {},
       contarTicketsPorTags: {},
-      totalTicketsEmAberto: 0,
-      totalticketsAtrasados: 0,
       tituloticketsAtrasados: {},
       refreshInterval: null,
       chart: null,
@@ -242,7 +242,7 @@ export default {
       const ctx = document.getElementById('TicketPieChart').getContext('2d');
 
       new Chart(ctx, {
-        type: 'polarArea',
+        type: 'pie',
         data: {
           labels: [`Em aberto: ${this.totalTicketsEmAberto}  `, `Atrasados: ${this.totalticketsAtrasados}`, `Pendentes de retorno: ${this.quantidadeTicketsPendentesRetornoCliente}`],
           datasets: [{
