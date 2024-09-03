@@ -124,7 +124,8 @@
                     <v-row>
                       <v-col cols="9">
                         <v-list-item-content>
-                          <v-list-item-title class="d-inline-block"><b>{{ title }}</b> | <span class="text-red">{{ data }}</span></v-list-item-title>
+                          <v-list-item-title class="d-inline-block"><b>{{ title }}</b> | <span class="text-red">{{ data
+                              }}</span></v-list-item-title>
                         </v-list-item-content>
                       </v-col>
                     </v-row>
@@ -171,11 +172,11 @@ export default {
       contarTicketsPorTags: {},
       tituloticketsAtrasados: {},
       refreshInterval: null,
-      chart: null,
+      chart: null,  // Inicializa a variável chart
     };
   },
   async mounted() {
-    this.fetchData();
+    await this.fetchData();
     this.startAutoRefresh();
   },
   methods: {
@@ -191,21 +192,24 @@ export default {
         this.contarTicketsPorStatus = (await listagemTickets.contarTicketsPorStatus()).statusCount;
         this.contarTicketsPorPrioridade = await listagemTickets.contarTicketsPorPrioridade();
         this.totalTicketsEmAberto = (await listagemTickets.contarTicketsPorStatus()).totalTicket;
-        this.contarTicketsPorTags = (await listagemTickets.contarTicketsPorTags());
+        this.contarTicketsPorTags = await listagemTickets.contarTicketsPorTags();
         this.totalticketsAtrasados = (await quantidadeTickets.totalticketsAtrasados()).totalticketsAtrasados;
         this.quantidadeTicketsPendentesRetornoCliente = (await quantidadeTickets.quantidadeTicketsPendentesRetornoCliente());
         this.tituloticketsAtrasados = (await quantidadeTickets.totalticketsAtrasados()).tituloticketsAtrasados;
-        this.createChart();
+        this.updateChart();
       } catch (error) {
         console.error("Erro ao buscar dados: ", error);
       }
     },
     startAutoRefresh() {
-      this.refreshInterval = setInterval(this.fetchData, 300000);
+      this.refreshInterval = setInterval(this.fetchData, 60000);
     },
     beforeDestroy() {
       if (this.refreshInterval) {
         clearInterval(this.refreshInterval);
+      }
+      if (this.chart) {
+        this.chart.destroy();  // Destroi o gráfico ao desmontar o componente
       }
     },
     ordenarStatus(statusCount) {
@@ -253,7 +257,7 @@ export default {
     createChart() {
       const ctx = document.getElementById('TicketPieChart').getContext('2d');
 
-      new Chart(ctx, {
+      this.chart = new Chart(ctx, {  // Atribui o gráfico a this.chart
         type: 'pie',
         data: {
           labels: [`Em dia: ${this.totalTicketsEmAberto - this.totalticketsAtrasados}  `, `Atrasados: ${this.totalticketsAtrasados}`, `Pendentes de retorno: ${this.quantidadeTicketsPendentesRetornoCliente}`],
@@ -290,6 +294,12 @@ export default {
           }
         }
       });
+    },
+    updateChart() {
+      if (this.chart) {
+        this.chart.destroy(); // Destroi o gráfico existente antes de criar um novo
+      }
+      this.createChart(); // Recria o gráfico com os dados atualizados
     }
   }
 };
