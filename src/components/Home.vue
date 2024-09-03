@@ -76,13 +76,19 @@
 
       <v-col cols="5" class="ml-5 mr-n12">
         <v-row>
-          <v-card class="mt-5 pr-4 color-custom" variant="tonal" title="TICKETS ABERTOS NO MÊS">
+          <v-card class="mt-5 pr-4 color-custom" variant="tonal">
+            <v-card-title>
+              TICKETS ABERTOS NO MÊS
+            </v-card-title>
             <div class="d-flex justify-center pt-5 pb-5 text-h1 font-weight-black">
               {{ quantidadeTicketsAbertosMes }}
             </div>
           </v-card>
 
-          <v-card class="mt-5 ml-5 pr-4 color-custom" variant="tonal" title="TICKETS ABERTOS NA SEMANA">
+          <v-card class="mt-5 ml-5 pr-4 color-custom" variant="tonal">
+            <v-card-title>
+              TICKETS ABERTOS NA SEMANA
+            </v-card-title>
             <div class="d-flex justify-center pt-5 pb-5 text-h1 font-weight-black">
               {{ quantidadeTicketsAbertosSemana }}
             </div>
@@ -90,13 +96,19 @@
         </v-row>
 
         <v-row>
-          <v-card class="mt-5" variant="tonal color-custom" title="TICKETS FECHADOS NO MÊS">
+          <v-card class="mt-5" variant="tonal color-custom">
+            <v-card-title>
+              TICKETS FECHADOS NO MÊS
+            </v-card-title>
             <div class="d-flex justify-center pt-5 pb-5 text-h1 font-weight-black">
               {{ quantidadeTicketsFechadosMes }}
             </div>
           </v-card>
 
-          <v-card class="mt-5 ml-5 color-custom" variant="tonal" title="TICKETS FECHADOS NA SEMANA">
+          <v-card class="mt-5 ml-5 color-custom" variant="tonal">
+            <v-card-title>
+              TICKETS FECHADOS NA SEMANA
+            </v-card-title>
             <div class="d-flex justify-center pt-5 pb-5 text-h1 font-weight-black">
               {{ quantidadeTicketsFechadosSemana }}
             </div>

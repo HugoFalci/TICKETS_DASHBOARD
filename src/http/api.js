@@ -1,6 +1,5 @@
-const authorization = 'pk_75349639_WBVUZF7JYVN5W3C6IWU1A8WXFGFJVYSM';
-const list_id = '900701897966';
-const space_id = '3243445';
+const authorization = import.meta.env.VITE_VUE_APP_CHAVE_API;
+const list_id = import.meta.env.VITE_VUE_APP_LIST_ID;
 
 export async function fetchTasks(query) {
     try {
