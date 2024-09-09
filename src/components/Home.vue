@@ -1,10 +1,10 @@
 <template>
   <v-container class="">
     <v-row>
-      <v-col cols="2" class="mt-2">
+      <v-col cols="2" class="mt-2 pr-4">
         <v-row class="">
           <v-col cols="" class="">
-            <v-card class="color-custom" variant="variant" title="TOP TAGS UTILIZADAS">
+            <v-card class="color-custom" variant="variant" title="TOP TAGS">
               <v-list class="color-custom">
                 <v-list-item-group>
                   <v-list-item v-for="(count, status) in contarTicketsPorTags" :key="status" class="">
@@ -76,6 +76,28 @@
 
       <v-col cols="5" class="ml-5 mr-n12">
         <v-row>
+          <v-col cols="11">
+            <v-card class="mt-2 ml-n3 mr-1 ">
+              <v-card-title variant="tonal" class="bg-red ">TICKETS PENDENTES DE RETORNO</v-card-title>
+              <v-list class="color-custom ticket-data-table">
+                <v-list-item-group>
+                  <v-list-item v-for="(data, title) in (tituloticketsAtrasados)" :key="title" class="">
+                    <v-row>
+                      <v-col cols="9">
+                        <v-list-item-content>
+                          <v-list-item-title class="d-inline-block"><b>{{ title }}</b> | <span class="text-red">{{ data
+                              }}</span></v-list-item-title>
+                        </v-list-item-content>
+                      </v-col>
+                    </v-row>
+                  </v-list-item>
+                </v-list-item-group>
+              </v-list>
+            </v-card>
+          </v-col>
+        </v-row>
+
+        <v-row>
           <v-card class="mt-5 pr-4 color-custom" variant="tonal">
             <v-card-title>
               TICKETS ABERTOS NO MÊS
@@ -114,37 +136,37 @@
             </div>
           </v-card>
         </v-row>
-
-        <v-row>
-          <v-col cols="11">
-            <v-card class="mt-2 ml-n3 mr-1 ticket-data-table">
-              <v-list class="color-custom">
-                <v-list-item-group>
-                  <v-list-item v-for="(data, title) in (tituloticketsAtrasados)" :key="title" class="">
-                    <v-row>
-                      <v-col cols="9">
-                        <v-list-item-content>
-                          <v-list-item-title class="d-inline-block"><b>{{ title }}</b> | <span class="text-red">{{ data
-                              }}</span></v-list-item-title>
-                        </v-list-item-content>
-                      </v-col>
-                    </v-row>
-                  </v-list-item>
-                </v-list-item-group>
-              </v-list>
-            </v-card>
-          </v-col>
-        </v-row>
       </v-col>
 
       <v-col class="mt-2 ml-1" md="3">
         <v-row>
           <v-col>
             <v-card class="color-custom pb-1" variant="tonal">
-              <v-card-title class="bg-red px-16">
-                TOTAL TICKETS ATRASADOS
+              <v-card-title class="px-16 text-center">
+                TOTAL TICKETS
               </v-card-title>
               <canvas class="mt-3" id="TicketPieChart"></canvas>
+            </v-card>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col>
+            <v-card class="">
+              <v-card-title variant="tonal" class="color-custom">URGENTES ABERTOS NA SEMANA | {{ tituloticketsPrioridadeAltaSemana.length }}</v-card-title>
+              <v-list class="color-custom ticket-data-table">
+                <v-list-item-group>
+                  <v-list-item v-for="(title) in (tituloticketsPrioridadeAltaSemana)" :key="title" class="">
+                    <v-row>
+                      <v-col cols="9">
+                        <v-list-item-content>
+                          <v-list-item-title class="d-inline-block"><b>{{ title }}</b></v-list-item-title>
+                        </v-list-item-content>
+                      </v-col>
+                    </v-row>
+                  </v-list-item>
+                </v-list-item-group>
+              </v-list>
             </v-card>
           </v-col>
         </v-row>
@@ -167,10 +189,12 @@ export default {
       quantidadeTicketsFechadosSemana: 0,
       totalTicketsEmAberto: 0,
       totalticketsAtrasados: 0,
+      priorityCountWeek: 0,
       contarTicketsPorStatus: {},
       contarTicketsPorPrioridade: {},
       contarTicketsPorTags: {},
       tituloticketsAtrasados: {},
+      tituloticketsPrioridadeAltaSemana: [],
       refreshInterval: null,
       chart: null,  // Inicializa a variável chart
     };
@@ -196,6 +220,8 @@ export default {
         this.totalticketsAtrasados = (await quantidadeTickets.totalticketsAtrasados()).totalticketsAtrasados;
         this.quantidadeTicketsPendentesRetornoCliente = (await quantidadeTickets.quantidadeTicketsPendentesRetornoCliente());
         this.tituloticketsAtrasados = (await quantidadeTickets.totalticketsAtrasados()).tituloticketsAtrasados;
+        this.tituloticketsPrioridadeAltaSemana = (await listagemTickets.prioridadesDaSemana()).tituloticketsPrioridadeAltaSemana;
+        this.priorityCountWeek = (await listagemTickets.prioridadesDaSemana()).priorityCountWeek;
         this.updateChart();
       } catch (error) {
         console.error("Erro ao buscar dados: ", error);
@@ -317,7 +343,7 @@ export default {
 }
 
 .ticket-data-table {
-  max-height: 305px;
+  max-height: 205px;
   overflow-y: auto;
 }
 </style>

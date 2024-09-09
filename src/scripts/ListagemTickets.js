@@ -1,4 +1,5 @@
-import { fetchTasks} from '../http/api.js'
+import { fetchTasks } from '../http/api.js'
+import { TratamentoDatas } from './TratamentoDatas.js'
 
 export class ListagemTickets {
     async contarTicketsPorStatus() {
@@ -29,8 +30,8 @@ export class ListagemTickets {
         const query = new URLSearchParams({
             include_closed: 'false'
         })
-        const priorityCount = {};
 
+        const priorityCount = {};
         const data = await fetchTasks(query);
 
         data.tasks.forEach(task => {
@@ -44,6 +45,34 @@ export class ListagemTickets {
         });
 
         return priorityCount;
+    }
+
+    async prioridadesDaSemana() {
+        const query = new URLSearchParams({
+            date_created_gt: TratamentoDatas.convertData(TratamentoDatas.segundaDaSemana()), // Data de início
+            date_created_lt: TratamentoDatas.convertData(TratamentoDatas.diaAtual()), // Data de fim
+            include_closed: 'true'           // Status dos tickets
+        }).toString();
+
+        const priorityCountWeek = {};
+        const tituloticketsPrioridadeAltaSemana = [];
+        const data = await fetchTasks(query);
+
+        data.tasks.forEach(task => {
+            const priority = task.priority.priority;
+
+            if (priorityCountWeek[priority]) {
+                priorityCountWeek[priority]++;
+            } else {
+                priorityCountWeek[priority] = 1;
+            }
+
+            if (priority === 'urgent' && !tituloticketsPrioridadeAltaSemana.includes(task.name)) {
+                tituloticketsPrioridadeAltaSemana.push(task.name);
+            }
+        });
+
+        return { priorityCountWeek, tituloticketsPrioridadeAltaSemana };
     }
 
     async buscarTagPorId(api) {
@@ -106,18 +135,17 @@ export class ListagemTickets {
     }
 }
 
-// async function run() {
-//     try {
-//         const analise = new ListagemTickets;
-//         // console.log(`Quantidade de tickets ABERTOS neste mês: ${await analise.quantidadeTicketsAbertosMes()}`);
-//         // console.log(`Quantidade de tickets ABERTOS nesta semana: ${await analise.quantidadeTicketsAbertosSemana()}`);
-//         // console.log(`Quantidade de tickets FECHADOS neste mês: ${await analise.quantidadeTicketsFechadosMes()}`);
-//         // console.log(`Quantidade de tickets FECHADOS nesta semana: ${await analise.quantidadeTicketsFechadosSemana()}`);
-//         console.log(`Tickets por status: ${JSON.stringify(await analise.contarTicketsPorTags(), null, 2)}`)
-//             ;
-//     } catch (error) {
-//         console.error('Erro ao buscar tarefas:', error);
-//     }
-// }
+async function run() {
+    try {
+        const analise = new ListagemTickets;
+        // console.log(`Quantidade de tickets ABERTOS neste mês: ${await analise.quantidadeTicketsAbertosMes()}`);
+        // console.log(`Quantidade de tickets ABERTOS nesta semana: ${await analise.quantidadeTicketsAbertosSemana()}`);
+        // console.log(`Quantidade de tickets FECHADOS neste mês: ${await analise.quantidadeTicketsFechadosMes()}`);
+        // console.log(`Quantidade de tickets FECHADOS nesta semana: ${await analise.quantidadeTicketsFechadosSemana()}`);
+        console.log(`Tickets por status: ${await analise.prioridadesDaSemana()}`);
+    } catch (error) {
+        console.error('Erro ao buscar tarefas:', error);
+    }
+}
 
-// run();
+run();
