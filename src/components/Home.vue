@@ -77,16 +77,21 @@
       <v-col cols="5" class="ml-5 mr-n12">
         <v-row>
           <v-col cols="11">
-            <v-card class="mt-2 ml-n3 mr-1 ">
-              <v-card-title variant="tonal" class="bg-red ">TICKETS PENDENTES DE RETORNO</v-card-title>
+            <v-card class="mt-2 ml-n3 mr-1">
+              <v-card-title variant="tonal" class="bg-red">
+                TICKETS PENDENTES DE RETORNO
+              </v-card-title>
               <v-list class="color-custom ticket-data-table">
                 <v-list-item-group>
-                  <v-list-item v-for="(data, title) in (tituloticketsAtrasados)" :key="title" class="">
+                  <v-list-item v-for="(ticket, title) in tituloticketsAtrasados" :key="title" class="">
                     <v-row>
                       <v-col cols="9">
                         <v-list-item-content>
-                          <v-list-item-title class="d-inline-block"><b>{{ title }}</b> | <span class="text-red">{{ data
-                              }}</span></v-list-item-title>
+                          <v-list-item-title class="d-inline-block">
+                            <b>{{ title }}</b> |
+                            <span class="text-red">{{ ticket.dataVencimento }}</span> |
+                            {{ ticket.status }}
+                          </v-list-item-title>
                         </v-list-item-content>
                       </v-col>
                     </v-row>
@@ -153,7 +158,8 @@
         <v-row>
           <v-col>
             <v-card class="">
-              <v-card-title variant="tonal" class="color-custom">URGENTES ABERTOS NA SEMANA | {{ tituloticketsPrioridadeAltaSemana.length }}</v-card-title>
+              <v-card-title variant="tonal" class="color-custom">URGENTES ABERTOS NA SEMANA | {{
+                tituloticketsPrioridadeAltaSemana.length }}</v-card-title>
               <v-list class="color-custom ticket-data-table">
                 <v-list-item-group>
                   <v-list-item v-for="(title) in (tituloticketsPrioridadeAltaSemana)" :key="title" class="">
@@ -195,6 +201,7 @@ export default {
       contarTicketsPorTags: {},
       tituloticketsAtrasados: {},
       tituloticketsPrioridadeAltaSemana: [],
+      statusTicketAtrasado: [],
       refreshInterval: null,
       chart: null,  // Inicializa a variável chart
     };
@@ -220,6 +227,7 @@ export default {
         this.totalticketsAtrasados = (await quantidadeTickets.totalticketsAtrasados()).totalticketsAtrasados;
         this.quantidadeTicketsPendentesRetornoCliente = (await quantidadeTickets.quantidadeTicketsPendentesRetornoCliente());
         this.tituloticketsAtrasados = (await quantidadeTickets.totalticketsAtrasados()).tituloticketsAtrasados;
+        this.statusTicketAtrasado = (await quantidadeTickets.totalticketsAtrasados()).statusTicketAtrasado;
         this.tituloticketsPrioridadeAltaSemana = (await listagemTickets.prioridadesDaSemana()).tituloticketsPrioridadeAltaSemana;
         this.priorityCountWeek = (await listagemTickets.prioridadesDaSemana()).priorityCountWeek;
         this.updateChart();
