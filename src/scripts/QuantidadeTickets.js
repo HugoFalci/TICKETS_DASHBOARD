@@ -78,11 +78,22 @@ export class QuantidadeTickets {
         statuses.forEach(status => query.append('statuses[]', status));
 
         const data = await fetchTasks(query.toString());
-
+        const tituloticketsPendentesRetorno = {};
         const quantidadeTicketsPendentesRetornoCliente = data.tasks.length;
 
+        data.tasks.forEach(task => {
+            const dataVencimento = task.due_date;
+            
+            tituloticketsPendentesRetorno[task.name] = {
+                title: task.name,
+                dataVencimento: TratamentoDatas.conversorParaData(dataVencimento),
+                status: task.status.status
+            };
+        })
+
+        console.log(tituloticketsPendentesRetorno)
         console.log('Quantidade de tickets pendentes de retorno ao cliente: ', quantidadeTicketsPendentesRetornoCliente);
-        return quantidadeTicketsPendentesRetornoCliente; // Pendente de front
+        return { quantidadeTicketsPendentesRetornoCliente, tituloticketsPendentesRetorno }; // Pendente de front
     }
 
     async totalticketsAtrasados() {
@@ -123,7 +134,7 @@ async function run() {
         // console.log(`Quantidade de tickets ABERTOS nesta semana: ${await analise.quantidadeTicketsAbertosSemana()}`);
         // console.log(`Quantidade de tickets FECHADOS neste mês: ${await analise.quantidadeTicketsFechadosMes()}`);
         // console.log(`Quantidade de tickets FECHADOS nesta semana: ${await analise.quantidadeTicketsFechadosSemana()}`);
-        await analise.totalticketsAtrasados();
+        await analise.quantidadeTicketsPendentesRetornoCliente();
         ;
     } catch (error) {
         console.error('Erro ao buscar tarefas:', error);

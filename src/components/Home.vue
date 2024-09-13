@@ -84,7 +84,7 @@
               </v-card-title>
               <v-list class="color-custom ticket-data-table">
                 <v-list-item-group>
-                  <v-list-item v-for="(ticket, title) in tituloticketsAtrasados" :key="title" class="">
+                  <v-list-item v-for="(ticket, title) in tituloticketsPendentesRetorno" :key="title" class="">
                     <v-row>
                       <v-col cols="9">
                         <v-list-item-content>
@@ -202,6 +202,7 @@ export default {
       contarTicketsPorPrioridade: {},
       contarTicketsPorTags: {},
       tituloticketsAtrasados: {},
+      tituloticketsPendentesRetorno: {},
       tituloticketsPrioridadeAltaSemana: [],
       statusTicketAtrasado: [],
       refreshInterval: null,
@@ -227,7 +228,8 @@ export default {
         this.totalTicketsEmAberto = (await listagemTickets.contarTicketsPorStatus()).totalTicket;
         this.contarTicketsPorTags = await listagemTickets.contarTicketsPorTags();
         this.totalticketsAtrasados = (await quantidadeTickets.totalticketsAtrasados()).totalticketsAtrasados;
-        this.quantidadeTicketsPendentesRetornoCliente = (await quantidadeTickets.quantidadeTicketsPendentesRetornoCliente());
+        this.quantidadeTicketsPendentesRetornoCliente = (await quantidadeTickets.quantidadeTicketsPendentesRetornoCliente()).quantidadeTicketsPendentesRetornoCliente;
+        this.tituloticketsPendentesRetorno = (await quantidadeTickets.quantidadeTicketsPendentesRetornoCliente()).tituloticketsPendentesRetorno;
         this.tituloticketsAtrasados = (await quantidadeTickets.totalticketsAtrasados()).tituloticketsAtrasados;
         this.statusTicketAtrasado = (await quantidadeTickets.totalticketsAtrasados()).statusTicketAtrasado;
         this.tituloticketsPrioridadeAltaSemana = (await listagemTickets.prioridadesDaSemana()).tituloticketsPrioridadeAltaSemana;
