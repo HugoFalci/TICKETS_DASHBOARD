@@ -79,7 +79,8 @@
           <v-col cols="11">
             <v-card class="mt-2 ml-n3 mr-1">
               <v-card-title variant="tonal" class="bg-red">
-                TICKETS PENDENTES DE RETORNO
+                TICKETS PENDENTES DE RETORNO | {{
+                tituloticketsAtrasados.length }}
               </v-card-title>
               <v-list class="color-custom ticket-data-table">
                 <v-list-item-group>
@@ -294,9 +295,17 @@ export default {
       this.chart = new Chart(ctx, {  // Atribui o gráfico a this.chart
         type: 'pie',
         data: {
-          labels: [`Em dia: ${this.totalTicketsEmAberto - this.totalticketsAtrasados}  `, `Atrasados: ${this.totalticketsAtrasados}`, `Pendentes de retorno: ${this.quantidadeTicketsPendentesRetornoCliente}`],
+          labels: [
+            `Em dia: ${this.totalTicketsEmAberto - this.totalticketsAtrasados}  `, 
+            `Atrasados: ${this.totalticketsAtrasados}`, 
+            `Pendentes de retorno: ${this.quantidadeTicketsPendentesRetornoCliente}`
+          ],
           datasets: [{
-            data: [this.totalTicketsEmAberto - this.totalticketsAtrasados, this.totalticketsAtrasados, this.quantidadeTicketsPendentesRetornoCliente],
+            data: [
+              this.totalTicketsEmAberto - this.totalticketsAtrasados, 
+              this.totalticketsAtrasados, 
+              this.quantidadeTicketsPendentesRetornoCliente
+            ],
             backgroundColor: ['#33A069', '#FFC107', '#E38388'],
           }]
         },
@@ -320,7 +329,7 @@ export default {
                 }
               }
             },
-            tootip: {
+            tooltip: {
               callbacks: {
                 label: (tooltipItem) => `${tooltipItem}: ${tooltipItem.raw}`,
               }
