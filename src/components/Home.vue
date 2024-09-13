@@ -80,7 +80,7 @@
             <v-card class="mt-2 ml-n3 mr-1">
               <v-card-title variant="tonal" class="bg-red">
                 TICKETS PENDENTES DE RETORNO | {{
-                tituloticketsAtrasados.length }}
+                quantidadeTicketsPendentesRetornoCliente }}
               </v-card-title>
               <v-list class="color-custom ticket-data-table">
                 <v-list-item-group>
