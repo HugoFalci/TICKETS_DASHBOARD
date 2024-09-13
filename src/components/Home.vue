@@ -197,6 +197,7 @@ export default {
       totalTicketsEmAberto: 0,
       totalticketsAtrasados: 0,
       priorityCountWeek: 0,
+      quantidadeTicketsPendentesRetornoCliente: 0,
       contarTicketsPorStatus: {},
       contarTicketsPorPrioridade: {},
       contarTicketsPorTags: {},
