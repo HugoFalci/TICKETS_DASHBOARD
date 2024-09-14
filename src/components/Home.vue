@@ -334,7 +334,7 @@ export default {
               labels: {
                 color: 'white',  // Cor dos rótulos da legenda
                 font: {
-                  size: 16       // Tamanho da fonte dos rótulos da legenda
+                  size: 26       // Tamanho da fonte dos rótulos da legenda
                 }
               }
             }
