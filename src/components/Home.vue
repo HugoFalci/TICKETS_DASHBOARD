@@ -79,8 +79,8 @@
           <v-col cols="11">
             <v-card class="mt-2 ml-n3 mr-1">
               <v-card-title variant="tonal" class="bg-red">
-                TICKETS PENDENTES DE RETORNO | {{
-                quantidadeTicketsPendentesRetornoCliente }}
+                TICKETS PENDENTES DE RETORNO: {{
+                  quantidadeTicketsPendentesRetornoCliente }}
               </v-card-title>
               <v-list class="color-custom ticket-data-table">
                 <v-list-item-group>
@@ -159,7 +159,7 @@
         <v-row>
           <v-col>
             <v-card class="">
-              <v-card-title variant="tonal" class="color-custom">URGENTES ABERTOS NA SEMANA | {{
+              <v-card-title variant="tonal" class="color-custom">URGENTES ABERTOS NA SEMANA: {{
                 tituloticketsPrioridadeAltaSemana.length }}</v-card-title>
               <v-list class="color-custom ticket-data-table">
                 <v-list-item-group>
@@ -186,6 +186,7 @@
 import { QuantidadeTickets } from "@/scripts/QuantidadeTickets.js";
 import { ListagemTickets } from "@/scripts/ListagemTickets.js";
 import Chart from 'chart.js/auto';
+import { color } from "chart.js/helpers";
 
 export default {
   data() {
@@ -295,46 +296,58 @@ export default {
     createChart() {
       const ctx = document.getElementById('TicketPieChart').getContext('2d');
 
-      this.chart = new Chart(ctx, {  // Atribui o gráfico a this.chart
-        type: 'pie',
+      this.chart = new Chart(ctx, {
+        type: 'bar',
         data: {
           labels: [
-            `Em dia: ${this.totalTicketsEmAberto - this.totalticketsAtrasados}  `, 
-            `Atrasados: ${this.totalticketsAtrasados}`, 
-            `Pendentes de retorno: ${this.quantidadeTicketsPendentesRetornoCliente}`
+            `Em dia: ${this.totalTicketsEmAberto - this.totalticketsAtrasados}`,
+            `Atrasados: ${this.totalticketsAtrasados}`,
+            `Pendentes: ${this.quantidadeTicketsPendentesRetornoCliente}`
           ],
           datasets: [{
             data: [
-              this.totalTicketsEmAberto - this.totalticketsAtrasados, 
-              this.totalticketsAtrasados, 
+              this.totalTicketsEmAberto - this.totalticketsAtrasados,
+              this.totalticketsAtrasados,
               this.quantidadeTicketsPendentesRetornoCliente
             ],
-            backgroundColor: ['#33A069', '#FFC107', '#E38388'],
+            backgroundColor: [
+              'rgba(51, 160, 105, 0.6)',  // Verde transparente (Em dia)
+              'rgba(255, 193, 7, 0.6)',   // Amarelo transparente (Atrasados)
+              'rgba(227, 131, 136, 0.6)'  // Vermelho transparente (Pendentes)
+            ],
+            borderColor: [
+              'rgba(102, 255, 102, 1)',    // Verde claro (Em dia) com borda opaca
+              'rgba(255, 235, 59, 1)',     // Amarelo claro (Atrasados) com borda opaca
+              'rgba(255, 99, 132, 1)'      // Rosa claro (Pendentes) com borda opaca
+            ],
+            borderWidth: 2,
+            borderRadius: 5,
+            borderSkipped: false,
           }]
         },
         options: {
           responsive: true,
-          layout: {
-            padding: {
-              bottom: 20,
-            }
-          },
           plugins: {
             legend: {
+              display: false,
               position: 'top',
-              align: 'start',
               labels: {
-                boxWidth: 20,
-                padding: 10,
-                color: 'white',
+                color: 'white',  // Cor dos rótulos da legenda
                 font: {
-                  size: 16
+                  size: 16       // Tamanho da fonte dos rótulos da legenda
                 }
               }
+            }
+          },
+          scales: {
+            x: {
+              ticks: {
+                color: 'white'  // Cor dos rótulos do eixo x
+              }
             },
-            tooltip: {
-              callbacks: {
-                label: (tooltipItem) => `${tooltipItem}: ${tooltipItem.raw}`,
+            y: {
+              ticks: {
+                color: 'white'  // Cor dos rótulos do eixo y
               }
             }
           }
