@@ -114,7 +114,7 @@ export class ListagemTickets {
         }
 
         const tagsOrdenadas = Object.fromEntries(Object.entries(tagsRenomeadas).sort(([, a], [, b]) => b - a));
-        const topTags = Object.entries(tagsOrdenadas).slice(0, 10);
+        const topTags = Object.entries(tagsOrdenadas).slice(0, 5);
 
         return topTags;
     }

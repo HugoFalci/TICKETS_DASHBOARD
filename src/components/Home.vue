@@ -1,28 +1,6 @@
 <template>
   <v-container class="">
     <v-row>
-      <v-col cols="2" class="mt-2 pr-4">
-        <v-row class="">
-          <v-col cols="" class="">
-            <v-card class="color-custom" variant="variant" title="TOP TAGS">
-              <v-list class="color-custom">
-                <v-list-item-group>
-                  <v-list-item v-for="(count, status) in contarTicketsPorTags" :key="status" class="">
-                    <v-row>
-                      <v-col cols="7">
-                        <v-list-item-content>
-                          <v-list-item-title class="d-inline-block"><b>{{ count }}</b></v-list-item-title>
-                        </v-list-item-content>
-                      </v-col>
-                    </v-row>
-                  </v-list-item>
-                </v-list-item-group>
-              </v-list>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-col>
-
       <v-col cols="2" class="mt-2 ml-2">
         <v-row class="">
           <v-col cols="" class="">
@@ -72,6 +50,26 @@
             </v-card>
           </v-col>
         </v-row>
+
+        <v-row class="">
+          <v-col cols="" class="">
+            <v-card class="color-custom" variant="variant" title="TOP TAGS">
+              <v-list class="color-custom">
+                <v-list-item-group>
+                  <v-list-item v-for="(count, status) in contarTicketsPorTags" :key="status" class="">
+                    <v-row>
+                      <v-col cols="7">
+                        <v-list-item-content>
+                          <v-list-item-title class="d-inline-block"><b>{{ count }}</b></v-list-item-title>
+                        </v-list-item-content>
+                      </v-col>
+                    </v-row>
+                  </v-list-item>
+                </v-list-item-group>
+              </v-list>
+            </v-card>
+          </v-col>
+        </v-row>
       </v-col>
 
       <v-col cols="5" class="ml-5 mr-n12">
@@ -93,6 +91,28 @@
                             <span class="text-red">{{ ticket.dataVencimento }}</span> |
                             {{ ticket.status }}
                           </v-list-item-title>
+                        </v-list-item-content>
+                      </v-col>
+                    </v-row>
+                  </v-list-item>
+                </v-list-item-group>
+              </v-list>
+            </v-card>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col cols="11" class=" ml-n3">
+            <v-card class=" mr-n2">
+              <v-card-title variant="tonal" class="bg-red">URGENTES NA SEMANA: {{
+                tituloticketsPrioridadeAltaSemana.length }}</v-card-title>
+              <v-list class="color-custom ticket-data-table">
+                <v-list-item-group>
+                  <v-list-item v-for="(title) in (tituloticketsPrioridadeAltaSemana)" :key="title" class="">
+                    <v-row>
+                      <v-col cols="9">
+                        <v-list-item-content>
+                          <v-list-item-title class="d-inline-block"><b>{{ title }}</b></v-list-item-title>
                         </v-list-item-content>
                       </v-col>
                     </v-row>
@@ -144,36 +164,14 @@
         </v-row>
       </v-col>
 
-      <v-col class="mt-2 ml-1" md="3">
-        <v-row>
-          <v-col>
-            <v-card class="color-custom pb-1" variant="tonal">
-              <v-card-title class="px-16 text-center">
+      <v-col class="mt-2 ml-1 ml-n4" lg="5" md="3">
+        <v-row class="">
+          <v-col cols="6" class="" lg="6" md="3">
+            <v-card class="color-custom pb-5" variant="tonal">
+              <v-card-title variant="tonal" class="px-16 text-center text-white">
                 TOTAL TICKETS
               </v-card-title>
               <canvas class="mt-3" id="TicketPieChart"></canvas>
-            </v-card>
-          </v-col>
-        </v-row>
-
-        <v-row>
-          <v-col>
-            <v-card class="">
-              <v-card-title variant="tonal" class="color-custom">URGENTES ABERTOS NA SEMANA: {{
-                tituloticketsPrioridadeAltaSemana.length }}</v-card-title>
-              <v-list class="color-custom ticket-data-table">
-                <v-list-item-group>
-                  <v-list-item v-for="(title) in (tituloticketsPrioridadeAltaSemana)" :key="title" class="">
-                    <v-row>
-                      <v-col cols="9">
-                        <v-list-item-content>
-                          <v-list-item-title class="d-inline-block"><b>{{ title }}</b></v-list-item-title>
-                        </v-list-item-content>
-                      </v-col>
-                    </v-row>
-                  </v-list-item>
-                </v-list-item-group>
-              </v-list>
             </v-card>
           </v-col>
         </v-row>
@@ -376,7 +374,7 @@ export default {
 }
 
 .ticket-data-table {
-  max-height: 205px;
+  max-height: 184px;
   overflow-y: auto;
 }
 </style>
