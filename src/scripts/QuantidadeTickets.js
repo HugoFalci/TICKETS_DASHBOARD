@@ -91,8 +91,6 @@ export class QuantidadeTickets {
             };
         })
 
-        console.log(tituloticketsPendentesRetorno)
-        console.log('Quantidade de tickets pendentes de retorno ao cliente: ', quantidadeTicketsPendentesRetornoCliente);
         return { quantidadeTicketsPendentesRetornoCliente, tituloticketsPendentesRetorno }; // Pendente de front
     }
 

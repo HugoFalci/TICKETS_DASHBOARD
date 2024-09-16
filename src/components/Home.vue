@@ -1,211 +1,28 @@
 <template>
-  <v-container class="">
+  <v-container>
     <v-row>
-      <v-col cols="2" class="mt-2 ml-2">
-        <v-row class="">
-          <v-col cols="" class="">
-            <v-card class="color-custom " variant="variant" title="PRIORIDADES">
-              <v-list class="color-custom">
-                <v-list-item-group>
-                  <v-list-item v-for="(count, status) in contarTicketsPorPrioridade" :key="status" class="">
-                    <v-row>
-                      <v-col cols="1" class="mt-1">
-                        <div :style="{ backgroundColor: getColor(status) }" class="status-bolinha mr-3"></div>
-                      </v-col>
-                      <v-col cols="7">
-                        <v-list-item-content>
-                          <v-list-item-title class="d-inline-block">{{ status }}: <b>{{ count }}</b></v-list-item-title>
-                        </v-list-item-content>
-                      </v-col>
-                    </v-row>
-                  </v-list-item>
-                </v-list-item-group>
-              </v-list>
-            </v-card>
-          </v-col>
-        </v-row>
-
-        <v-row>
-          <v-col>
-            <v-card class="color-custom" variant="variant" title="STATUS TICKETS">
-              <v-card-subtitle>
-                Total de tickets em aberto: {{ totalTicketsEmAberto }}
-              </v-card-subtitle>
-              <v-list class="mt-3 color-custom">
-                <v-list-item-group>
-                  <v-list-item v-for="(count, status) in ordenarStatus(contarTicketsPorStatus)" :key="status" class="">
-                    <v-row>
-                      <v-col cols="1" class="mt-1">
-                        <div :style="{ backgroundColor: getColor(status) }" class="status-bolinha mr-3"></div>
-                      </v-col>
-                      <v-col cols="9">
-                        <v-list-item-content>
-                          <v-list-item-title class="d-inline-block">{{ status }}: <b>{{ count }}</b></v-list-item-title>
-                        </v-list-item-content>
-                      </v-col>
-                    </v-row>
-                  </v-list-item>
-                </v-list-item-group>
-              </v-list>
-            </v-card>
-          </v-col>
-        </v-row>
-
-        <v-row class="">
-          <v-col cols="" class="">
-            <v-card class="color-custom" variant="variant" title="TOP TAGS">
-              <v-list class="color-custom">
-                <v-list-item-group>
-                  <v-list-item v-for="(count, status) in contarTicketsPorTags" :key="status" class="">
-                    <v-row>
-                      <v-col cols="7">
-                        <v-list-item-content>
-                          <v-list-item-title class="d-inline-block"><b>{{ count }}</b></v-list-item-title>
-                        </v-list-item-content>
-                      </v-col>
-                    </v-row>
-                  </v-list-item>
-                </v-list-item-group>
-              </v-list>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-col>
+      <StatusTickets ref="statusTickets" />
 
       <v-col cols="5" class="ml-5 mr-n12">
-        <v-row>
-          <v-col cols="11">
-            <v-card class="mt-2 ml-n3 mr-1">
-              <v-card-title variant="tonal" class="bg-red">
-                TICKETS PENDENTES DE RETORNO: {{
-                  quantidadeTicketsPendentesRetornoCliente }}
-              </v-card-title>
-              <v-list class="color-custom ticket-data-table">
-                <v-list-item-group>
-                  <v-list-item v-for="(ticket, title) in tituloticketsPendentesRetorno" :key="title" class="">
-                    <v-row>
-                      <v-col cols="9">
-                        <v-list-item-content>
-                          <v-list-item-title class="d-inline-block">
-                            <b>{{ title }}</b> |
-                            <span class="text-red">{{ ticket.dataVencimento }}</span> |
-                            {{ ticket.status }}
-                          </v-list-item-title>
-                        </v-list-item-content>
-                      </v-col>
-                    </v-row>
-                  </v-list-item>
-                </v-list-item-group>
-              </v-list>
-            </v-card>
-          </v-col>
-        </v-row>
-
-        <v-row>
-          <v-col cols="11" class=" ml-n3">
-            <v-card class=" mr-n2">
-              <v-card-title variant="tonal" class="bg-red">URGENTES NA SEMANA: {{
-                tituloticketsPrioridadeAltaSemana.length }}</v-card-title>
-              <v-list class="color-custom ticket-data-table">
-                <v-list-item-group>
-                  <v-list-item v-for="(title) in (tituloticketsPrioridadeAltaSemana)" :key="title" class="">
-                    <v-row>
-                      <v-col cols="9">
-                        <v-list-item-content>
-                          <v-list-item-title class="d-inline-block"><b>{{ title }}</b></v-list-item-title>
-                        </v-list-item-content>
-                      </v-col>
-                    </v-row>
-                  </v-list-item>
-                </v-list-item-group>
-              </v-list>
-            </v-card>
-          </v-col>
-        </v-row>
-
-        <v-row>
-          <v-card class="mt-5 pr-4 color-custom" variant="tonal">
-            <v-card-title>
-              TICKETS ABERTOS NO MÊS
-            </v-card-title>
-            <div class="d-flex justify-center pt-5 pb-5 text-h1 font-weight-black">
-              {{ quantidadeTicketsAbertosMes }}
-            </div>
-          </v-card>
-
-          <v-card class="mt-5 ml-5 pr-4 color-custom" variant="tonal">
-            <v-card-title>
-              TICKETS ABERTOS NA SEMANA
-            </v-card-title>
-            <div class="d-flex justify-center pt-5 pb-5 text-h1 font-weight-black">
-              {{ quantidadeTicketsAbertosSemana }}
-            </div>
-          </v-card>
-        </v-row>
-
-        <v-row>
-          <v-card class="mt-5" variant="tonal color-custom">
-            <v-card-title>
-              TICKETS FECHADOS NO MÊS
-            </v-card-title>
-            <div class="d-flex justify-center pt-5 pb-5 text-h1 font-weight-black">
-              {{ quantidadeTicketsFechadosMes }}
-            </div>
-          </v-card>
-
-          <v-card class="mt-5 ml-5 color-custom" variant="tonal">
-            <v-card-title>
-              TICKETS FECHADOS NA SEMANA
-            </v-card-title>
-            <div class="d-flex justify-center pt-5 pb-5 text-h1 font-weight-black">
-              {{ quantidadeTicketsFechadosSemana }}
-            </div>
-          </v-card>
-        </v-row>
+        <ListagemTicketsDescritivo ref="listagemTicketsDescritivo" />
+        <QuantidadesTicketsCards ref="quantidadesTicketsCards" />
       </v-col>
 
-      <v-col class="mt-2 ml-1 ml-n4" lg="5" md="3">
-        <v-row class="">
-          <v-col cols="6" class="" lg="6" md="3">
-            <v-card class="color-custom pb-5" variant="tonal">
-              <v-card-title variant="tonal" class="px-16 text-center text-white">
-                TOTAL TICKETS
-              </v-card-title>
-              <canvas class="mt-3" id="TicketPieChart"></canvas>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-col>
+      <TotalTickets />
     </v-row>
   </v-container>
 </template>
 
 <script>
-import { QuantidadeTickets } from "@/scripts/QuantidadeTickets.js";
-import { ListagemTickets } from "@/scripts/ListagemTickets.js";
-import Chart from 'chart.js/auto';
-import { color } from "chart.js/helpers";
+import QuantidadesTicketsCards from "./QuantidadesTicketsCards.vue";
+import ListagemTicketsDescritivo from "./ListagemTicketsDescritivo.vue";
+import StatusTickets from "./StatusTickets.vue";
+import TotalTickets from "./TotalTickets.vue";
 
 export default {
   data() {
     return {
-      quantidadeTicketsAbertosMes: 0,
-      quantidadeTicketsAbertosSemana: 0,
-      quantidadeTicketsFechadosMes: 0,
-      quantidadeTicketsFechadosSemana: 0,
-      totalTicketsEmAberto: 0,
-      totalticketsAtrasados: 0,
-      priorityCountWeek: 0,
-      quantidadeTicketsPendentesRetornoCliente: 0,
-      contarTicketsPorStatus: {},
-      contarTicketsPorPrioridade: {},
-      contarTicketsPorTags: {},
-      tituloticketsAtrasados: {},
-      tituloticketsPendentesRetorno: {},
-      tituloticketsPrioridadeAltaSemana: [],
-      statusTicketAtrasado: [],
       refreshInterval: null,
-      chart: null,  // Inicializa a variável chart
     };
   },
   async mounted() {
@@ -214,149 +31,12 @@ export default {
   },
   methods: {
     async fetchData() {
-      const quantidadeTickets = new QuantidadeTickets();
-      const listagemTickets = new ListagemTickets();
-
-      try {
-        this.quantidadeTicketsAbertosMes = await quantidadeTickets.quantidadeTicketsAbertosMes();
-        this.quantidadeTicketsAbertosSemana = await quantidadeTickets.quantidadeTicketsAbertosSemana();
-        this.quantidadeTicketsFechadosMes = await quantidadeTickets.quantidadeTicketsFechadosMes();
-        this.quantidadeTicketsFechadosSemana = await quantidadeTickets.quantidadeTicketsFechadosSemana();
-        this.contarTicketsPorStatus = (await listagemTickets.contarTicketsPorStatus()).statusCount;
-        this.contarTicketsPorPrioridade = await listagemTickets.contarTicketsPorPrioridade();
-        this.totalTicketsEmAberto = (await listagemTickets.contarTicketsPorStatus()).totalTicket;
-        this.contarTicketsPorTags = await listagemTickets.contarTicketsPorTags();
-        this.totalticketsAtrasados = (await quantidadeTickets.totalticketsAtrasados()).totalticketsAtrasados;
-        this.quantidadeTicketsPendentesRetornoCliente = (await quantidadeTickets.quantidadeTicketsPendentesRetornoCliente()).quantidadeTicketsPendentesRetornoCliente;
-        this.tituloticketsPendentesRetorno = (await quantidadeTickets.quantidadeTicketsPendentesRetornoCliente()).tituloticketsPendentesRetorno;
-        this.tituloticketsAtrasados = (await quantidadeTickets.totalticketsAtrasados()).tituloticketsAtrasados;
-        this.statusTicketAtrasado = (await quantidadeTickets.totalticketsAtrasados()).statusTicketAtrasado;
-        this.tituloticketsPrioridadeAltaSemana = (await listagemTickets.prioridadesDaSemana()).tituloticketsPrioridadeAltaSemana;
-        this.priorityCountWeek = (await listagemTickets.prioridadesDaSemana()).priorityCountWeek;
-        this.updateChart();
-      } catch (error) {
-        console.error("Erro ao buscar dados: ", error);
-      }
+      this.$refs.quantidadesTicketsCards.fetchData();
+      this.$refs.listagemTicketsDescritivo.fetchData();
+      this.$refs.statusTickets.fetchData();
     },
     startAutoRefresh() {
       this.refreshInterval = setInterval(this.fetchData, 60000);
-    },
-    beforeDestroy() {
-      if (this.refreshInterval) {
-        clearInterval(this.refreshInterval);
-      }
-      if (this.chart) {
-        this.chart.destroy();  // Destroi o gráfico ao desmontar o componente
-      }
-    },
-    ordenarStatus(statusCount) {
-      const ordemDesejada = [
-        "a fazer",
-        "em desenvolvimento",
-        "negado dev",
-        "ag. info",
-        "reprovado qa",
-        "ag. publicação",
-        "publicado dev",
-        "publicado master",
-        "retornar cliente"
-      ];
-
-      const statusCountOrdenados = {};
-
-      ordemDesejada.forEach(status => {
-        if (statusCount[status] !== undefined) {
-          statusCountOrdenados[status] = statusCount[status];
-        }
-      });
-
-      return statusCountOrdenados;
-    },
-
-    getColor(status) {
-      const colors = {
-        "a fazer": "#FFC107",
-        "em desenvolvimento": "#6985FF",
-        "publicado dev": "#E78945",
-        "publicado master": "#33A069",
-        "ag. publicação": "#C580E6",
-        "retornar cliente": "#40A6E6",
-        "ag. info": "#E78945",
-        "negado dev": "#DC646A",
-        "reprovado qa": "#F9BE33",
-        "urgent": "#E38388",
-        "high": "#FBCB5C",
-        "normal": "#879DFF"
-      };
-      return colors[status] || "#ccc";
-    },
-
-    createChart() {
-      const ctx = document.getElementById('TicketPieChart').getContext('2d');
-
-      this.chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: [
-            `Em dia: ${this.totalTicketsEmAberto - this.totalticketsAtrasados}`,
-            `Atrasados: ${this.totalticketsAtrasados}`,
-            `Pendentes: ${this.quantidadeTicketsPendentesRetornoCliente}`
-          ],
-          datasets: [{
-            data: [
-              this.totalTicketsEmAberto - this.totalticketsAtrasados,
-              this.totalticketsAtrasados,
-              this.quantidadeTicketsPendentesRetornoCliente
-            ],
-            backgroundColor: [
-              'rgba(51, 160, 105, 0.6)',  // Verde transparente (Em dia)
-              'rgba(255, 193, 7, 0.6)',   // Amarelo transparente (Atrasados)
-              'rgba(227, 131, 136, 0.6)'  // Vermelho transparente (Pendentes)
-            ],
-            borderColor: [
-              'rgba(102, 255, 102, 1)',    // Verde claro (Em dia) com borda opaca
-              'rgba(255, 235, 59, 1)',     // Amarelo claro (Atrasados) com borda opaca
-              'rgba(255, 99, 132, 1)'      // Rosa claro (Pendentes) com borda opaca
-            ],
-            borderWidth: 2,
-            borderRadius: 5,
-            borderSkipped: false,
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              display: false,
-              position: 'top',
-              labels: {
-                color: 'white',  // Cor dos rótulos da legenda
-                font: {
-                  size: 26       // Tamanho da fonte dos rótulos da legenda
-                }
-              }
-            }
-          },
-          scales: {
-            x: {
-              ticks: {
-                color: 'white'  // Cor dos rótulos do eixo x
-              }
-            },
-            y: {
-              ticks: {
-                color: 'white'  // Cor dos rótulos do eixo y
-              }
-            }
-          }
-        }
-      });
-    },
-    updateChart() {
-      if (this.chart) {
-        this.chart.destroy(); // Destroi o gráfico existente antes de criar um novo
-      }
-      this.createChart(); // Recria o gráfico com os dados atualizados
     }
   }
 };
@@ -371,10 +51,5 @@ export default {
 
 .color-custom {
   background-color: #404040;
-}
-
-.ticket-data-table {
-  max-height: 184px;
-  overflow-y: auto;
 }
 </style>
