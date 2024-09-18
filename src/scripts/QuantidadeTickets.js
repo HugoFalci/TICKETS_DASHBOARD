@@ -54,21 +54,54 @@ export class QuantidadeTickets {
     }
 
     async quantidadeTicketsFechadosMes() {
-        const query = new URLSearchParams({
-            date_updated_gt: TratamentoDatas.convertData(TratamentoDatas.diaInicioMes()), // Data de início
-            date_updated_lt: TratamentoDatas.convertData(TratamentoDatas.diaAtual()), // Data de fim
-            'statuses[]': ['Fechado']           // Status dos tickets
-        }).toString();
-
-        const data = await fetchTasks(query);
-
-        if (Array.isArray(data.tasks)) {
-            return data.tasks.length;
-        } else {
-            console.error(`O formato dos tickets fechados no mês não é esperado. Erro: `, error)
-            return 0;
+        let totalTickets = 0;
+        let hasMorePages = true;
+        let page = 0; // Página inicial
+        const maxPages = 10; // Limite máximo de páginas para evitar loop infinito (ajuste conforme necessário)
+        const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms)); // Função para adicionar atraso
+    
+        while (hasMorePages && page < maxPages) {
+            const queryParams = new URLSearchParams({
+                date_updated_gt: TratamentoDatas.convertData(TratamentoDatas.diaInicioMes()), // Data de início
+                date_updated_lt: TratamentoDatas.convertData(TratamentoDatas.diaAtual()), // Data de fim
+                'statuses[]': ['Fechado'],           // Status dos tickets
+                page: page.toString(), // Página atual (começa de 0)
+                per_page: '100', // Limite de 100 tickets por página
+                include_closed: 'true' // Incluir tickets fechados
+            }).toString();
+    
+            try {
+                const data = await fetchTasks(queryParams);
+    
+                if (Array.isArray(data.tasks)) {
+                    totalTickets += data.tasks.length;
+    
+                    // Verifica se há mais páginas de tickets
+                    if (data.tasks.length < 100) {
+                        hasMorePages = false; // Se o número de tickets retornados for menor que 100, não há mais páginas
+                    } else {
+                        page++; // Se há mais tickets, incrementa a página
+                    }
+    
+                    // Adiciona um pequeno atraso para evitar sobrecarga no servidor
+                    await delay(500); // Atraso de 500ms entre as requisições (ajuste conforme necessário)
+                } else {
+                    console.error(`O formato dos tickets fechados no mês não é esperado.`);
+                    return 0;
+                }
+            } catch (error) {
+                console.error(`Erro ao buscar tarefas: `, error);
+                return 0;
+            }
         }
-    }
+    
+        // Se o limite de páginas foi atingido, avisa o usuário
+        if (page >= maxPages) {
+            console.warn('Limite de páginas atingido. Nem todos os tickets podem ter sido recuperados.');
+        }
+    
+        return totalTickets;
+    } 
 
     async quantidadeTicketsPendentesRetornoCliente() {
         const query = new URLSearchParams();
@@ -83,7 +116,7 @@ export class QuantidadeTickets {
 
         data.tasks.forEach(task => {
             const dataVencimento = task.due_date;
-            
+
             tituloticketsPendentesRetorno[task.name] = {
                 title: task.name,
                 dataVencimento: TratamentoDatas.conversorParaData(dataVencimento),
@@ -132,8 +165,8 @@ async function run() {
         // console.log(`Quantidade de tickets ABERTOS nesta semana: ${await analise.quantidadeTicketsAbertosSemana()}`);
         // console.log(`Quantidade de tickets FECHADOS neste mês: ${await analise.quantidadeTicketsFechadosMes()}`);
         // console.log(`Quantidade de tickets FECHADOS nesta semana: ${await analise.quantidadeTicketsFechadosSemana()}`);
-        await analise.quantidadeTicketsPendentesRetornoCliente();
-        ;
+        console.log(await analise.quantidadeTicketsFechadosMes())
+            ;
     } catch (error) {
         console.error('Erro ao buscar tarefas:', error);
     }

@@ -41,15 +41,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.status-bolinha {
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-}
-
-.color-custom {
-  background-color: #404040;
-}
-</style>
