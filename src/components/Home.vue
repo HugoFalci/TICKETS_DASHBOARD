@@ -8,7 +8,7 @@
         <QuantidadesTicketsCards ref="quantidadesTicketsCards" />
       </v-col>
 
-      <TotalTickets />
+      <GrafTotalTickets />
     </v-row>
   </v-container>
 </template>
@@ -17,7 +17,7 @@
 import QuantidadesTicketsCards from "./QuantidadesTicketsCards.vue";
 import ListagemTicketsDescritivo from "./ListagemTicketsDescritivo.vue";
 import StatusTickets from "./StatusTickets.vue";
-import TotalTickets from "./TotalTickets.vue";
+import GrafTotalTickets from "./GrafTotalTickets.vue";
 
 export default {
   data() {

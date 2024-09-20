@@ -1,5 +1,5 @@
-const authorization = import.meta.env.VITE_VUE_APP_CHAVE_API;
-const list_id = import.meta.env.VITE_VUE_APP_LIST_ID;
+const authorization = 'pk_75349639_WBVUZF7JYVN5W3C6IWU1A8WXFGFJVYSM';
+const list_id = '900701897966';
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));

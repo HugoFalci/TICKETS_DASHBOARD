@@ -135,17 +135,17 @@ export class ListagemTickets {
     }
 }
 
-async function run() {
-    try {
-        const analise = new ListagemTickets;
-        // console.log(`Quantidade de tickets ABERTOS neste mês: ${await analise.quantidadeTicketsAbertosMes()}`);
-        // console.log(`Quantidade de tickets ABERTOS nesta semana: ${await analise.quantidadeTicketsAbertosSemana()}`);
-        // console.log(`Quantidade de tickets FECHADOS neste mês: ${await analise.quantidadeTicketsFechadosMes()}`);
-        // console.log(`Quantidade de tickets FECHADOS nesta semana: ${await analise.quantidadeTicketsFechadosSemana()}`);
-        console.log(`Tickets por status: ${await analise.prioridadesDaSemana()}`);
-    } catch (error) {
-        console.error('Erro ao buscar tarefas:', error);
-    }
-}
+// async function run() {
+//     try {
+//         const analise = new ListagemTickets;
+//         // console.log(`Quantidade de tickets ABERTOS neste mês: ${await analise.quantidadeTicketsAbertosMes()}`);
+//         // console.log(`Quantidade de tickets ABERTOS nesta semana: ${await analise.quantidadeTicketsAbertosSemana()}`);
+//         // console.log(`Quantidade de tickets FECHADOS neste mês: ${await analise.quantidadeTicketsFechadosMes()}`);
+//         // console.log(`Quantidade de tickets FECHADOS nesta semana: ${await analise.quantidadeTicketsFechadosSemana()}`);
+//         console.log(`Tickets por status: ${await analise.prioridadesDaSemana()}`);
+//     } catch (error) {
+//         console.error('Erro ao buscar tarefas:', error);
+//     }
+// }
 
-run();
+// run();
